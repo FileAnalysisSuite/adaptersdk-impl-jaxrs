@@ -1,0 +1,3 @@
+# Java Adapter SDK JAX-RS Implementation
+
+This module implements the [REST Adapter's JAX-RS Server Stubs](https://github.com/FileAnalysisSuite/adapter-rest-contract/tree/main/adapter-rest-java-jaxrs), and the [Java Adapter SDK Framework Interfaces](https://github.com/FileAnalysisSuite/adaptersdk-interfaces/tree/main/src/main/java/io/github/fileanalysissuite/adaptersdk/interfaces/framework), so that adapters written against the [Java Adapter SDK](https://github.com/FileAnalysisSuite/adaptersdk-interfaces) can be hosted on any platform that supports [Jakarta EE 8](https://jakarta.ee/release/8/).
