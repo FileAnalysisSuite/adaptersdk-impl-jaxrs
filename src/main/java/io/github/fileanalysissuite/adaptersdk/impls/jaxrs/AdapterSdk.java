@@ -15,8 +15,9 @@
  */
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
-import io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.api.AdapterApi;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
+import java.util.Collections;
+import java.util.Set;
 import javax.annotation.Nonnull;
 
 public final class AdapterSdk
@@ -25,9 +26,16 @@ public final class AdapterSdk
     {
     }
 
+    /**
+     * Returns a set of objects that need to be registered as singleton components in order to call into the specified adapter
+     * implementation.
+     *
+     * @param adapter the implementation of the adapter
+     * @return a set of objects that need to be registered as singleton components
+     */
     @Nonnull
-    public static AdapterApi wrap(final RepositoryAdapter adapter)
+    public static Set<Object> wrap(final RepositoryAdapter adapter)
     {
-        return new AdapterApiImpl(adapter);
+        return Collections.singleton(new AdapterApiImpl(adapter));
     }
 }
