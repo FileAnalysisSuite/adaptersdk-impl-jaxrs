@@ -19,10 +19,10 @@ import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.m
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileDataItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataResponse;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.ItemMetadataFunctions;
-import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.CancellationToken;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileContents;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.ItemMetadata;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.OpenStreamFunction;
+import io.github.fileanalysissuite.adaptersdk.interfaces.framework.CancellationToken;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.FileDataResultsHandler;
 import java.io.IOException;
 import java.io.InputStream;

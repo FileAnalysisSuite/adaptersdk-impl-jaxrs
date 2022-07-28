@@ -15,7 +15,7 @@
  */
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
-import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.CancellationToken;
+import io.github.fileanalysissuite.adaptersdk.interfaces.framework.CancellationToken;
 
 enum StandardCancellationTokens implements CancellationToken
 {
