@@ -28,14 +28,14 @@ public final class ItemMetadataFunctions
     {
     }
 
-    public static io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.ItemMetadata convertToModel(
+    public static io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata convertToModel(
         final ItemMetadata itemMetadata
     )
     {
         Objects.requireNonNull(itemMetadata);
 
-        final io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.ItemMetadata modelItemMetadata
-            = new io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.ItemMetadata()
+        final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata modelItemMetadata
+            = new io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata()
                 .itemLocation(itemMetadata.getItemLocation())
                 .name(itemMetadata.getName())
                 .title(itemMetadata.getTitle())

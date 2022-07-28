@@ -42,8 +42,8 @@ abstract class FailureRegistrationImpl implements FailureRegistration
 
     private void registerFailureImpl(final FailureDetails failureDetails)
     {
-        final io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.FailureDetails responseFailureDetails
-            = new io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.FailureDetails();
+        final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails responseFailureDetails
+            = new io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails();
 
         responseFailureDetails.setMessage(failureDetails.getMessage());
 
@@ -59,6 +59,6 @@ abstract class FailureRegistrationImpl implements FailureRegistration
     }
 
     protected abstract void addFailuresItem(
-        io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.FailureDetails failureDetails
+        io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails failureDetails
     );
 }

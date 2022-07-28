@@ -23,10 +23,10 @@ import javax.annotation.Nonnull;
 
 final class RetrieveFileListRequestImpl implements RetrieveFileListRequest
 {
-    private final io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RetrieveFileListRequest request;
+    private final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListRequest request;
 
     public RetrieveFileListRequestImpl(
-        final io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RetrieveFileListRequest request
+        final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListRequest request
     )
     {
         this.request = Objects.requireNonNull(request);

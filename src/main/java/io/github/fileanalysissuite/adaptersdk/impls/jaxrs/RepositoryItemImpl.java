@@ -22,10 +22,10 @@ import javax.annotation.Nonnull;
 
 final class RepositoryItemImpl implements RepositoryItem
 {
-    private final io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RepositoryItem item;
+    private final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryItem item;
 
     public RepositoryItemImpl(
-        final io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RepositoryItem item
+        final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryItem item
     )
     {
         // TODO: The itemId and metadata properties are not marked required in the interface, and yet they are @Nonnull here

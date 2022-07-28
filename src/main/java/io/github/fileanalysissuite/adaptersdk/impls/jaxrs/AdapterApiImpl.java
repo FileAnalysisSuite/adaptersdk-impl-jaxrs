@@ -15,11 +15,11 @@
  */
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
-import io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.api.AdapterApi;
-import io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RetrieveFileDataRequest;
-import io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RetrieveFileDataResponse;
-import io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RetrieveFileListRequest;
-import io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RetrieveFileListResponse;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.api.AdapterApi;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataRequest;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataResponse;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListRequest;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListResponse;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
 import java.util.Objects;
 import javax.annotation.Nonnull;

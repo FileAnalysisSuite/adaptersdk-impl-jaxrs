@@ -26,10 +26,10 @@ import javax.annotation.Nonnull;
 
 final class ItemMetadataImpl implements ItemMetadata
 {
-    private final io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.ItemMetadata metadata;
+    private final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata metadata;
 
     public ItemMetadataImpl(
-        final io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.ItemMetadata metadata
+        final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata metadata
     )
     {
         this.metadata = Objects.requireNonNull(metadata);

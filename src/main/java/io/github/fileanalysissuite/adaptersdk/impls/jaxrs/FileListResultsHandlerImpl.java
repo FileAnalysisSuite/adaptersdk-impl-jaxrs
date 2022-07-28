@@ -15,9 +15,9 @@
  */
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
-import io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.FailureDetails;
-import io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.FileListItem;
-import io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RetrieveFileListResponse;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileListItem;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListResponse;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.ItemMetadataFunctions;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.CancellationToken;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.ItemMetadata;

@@ -22,14 +22,14 @@ import javax.annotation.Nonnull;
 
 final class RepositoryPropertiesImpl implements RepositoryProperties
 {
-    private final io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RepositoryProperties properties;
+    private final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryProperties properties;
 
     public RepositoryPropertiesImpl(
-        final io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RepositoryProperties properties
+        final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryProperties properties
     )
     {
         this.properties = Optional.ofNullable(properties)
-            .orElseGet(io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RepositoryProperties::new);
+            .orElseGet(io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryProperties::new);
     }
 
     @Nonnull

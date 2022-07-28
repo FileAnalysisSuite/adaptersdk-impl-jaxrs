@@ -25,10 +25,10 @@ import javax.annotation.Nonnull;
 
 final class RetrieveFilesDataRequestImpl implements RetrieveFilesDataRequest
 {
-    private final io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RetrieveFileDataRequest request;
+    private final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataRequest request;
 
     public RetrieveFilesDataRequestImpl(
-        final io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RetrieveFileDataRequest request
+        final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataRequest request
     )
     {
         this.request = Objects.requireNonNull(request);
@@ -38,7 +38,7 @@ final class RetrieveFilesDataRequestImpl implements RetrieveFilesDataRequest
     @Override
     public Iterable<RepositoryItem> getItems()
     {
-        final List<io.github.fileanalysissuite.adapters.rest.contract.serverstubs.jaxrs.model.RepositoryItem> items = request.getItems();
+        final List<io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryItem> items = request.getItems();
 
         return items == null
             ? Collections.emptyList()
