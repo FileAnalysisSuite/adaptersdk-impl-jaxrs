@@ -17,10 +17,11 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils;
 
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.ItemMetadata;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import javax.annotation.Nonnull;
 
 public final class ItemMetadataFunctions
 {
@@ -28,6 +29,7 @@ public final class ItemMetadataFunctions
     {
     }
 
+    @Nonnull
     public static io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata convertToModel(
         final ItemMetadata itemMetadata
     )
@@ -40,9 +42,13 @@ public final class ItemMetadataFunctions
                 .name(itemMetadata.getName())
                 .title(itemMetadata.getTitle())
                 .size(itemMetadata.getSize())
-                .createdTime(Optional.ofNullable(itemMetadata.getCreatedTime()).map(Instant::toString).orElse(null))
-                .accessedTime(Optional.ofNullable(itemMetadata.getAccessedTime()).map(Instant::toString).orElse(null))
-                .modifiedTime(itemMetadata.getModifiedTime().toString())
+                .createdTime(Optional.ofNullable(itemMetadata.getCreatedTime())
+                    .map(instant -> instant.atOffset(ZoneOffset.UTC))
+                    .orElse(null))
+                .accessedTime(Optional.ofNullable(itemMetadata.getAccessedTime())
+                    .map(instant -> instant.atOffset(ZoneOffset.UTC))
+                    .orElse(null))
+                .modifiedTime(itemMetadata.getModifiedTime().atOffset(ZoneOffset.UTC))
                 .version(itemMetadata.getVersion());
 
         // TODO: What are we meant to do with these?

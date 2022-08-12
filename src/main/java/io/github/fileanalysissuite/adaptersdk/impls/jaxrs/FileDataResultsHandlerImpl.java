@@ -26,9 +26,10 @@ import io.github.fileanalysissuite.adaptersdk.interfaces.framework.CancellationT
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.FileDataResultsHandler;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.Base64;
 import java.util.Objects;
-import java.util.Optional;
+import javax.annotation.Nonnull;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,19 +61,20 @@ final class FileDataResultsHandlerImpl extends FailureRegistrationImpl implement
         // TODO: We're going to have to change this as we shouldn't be putting the entire contents of the file into a string
         response.addItemsItem(new FileDataItem()
             .itemId(itemId)
-            .fileContents(toByteArray(fileContents.getContentStream(), itemId).map(Base64.getEncoder()::encodeToString).orElse(null))
-            .metadata(ItemMetadataFunctions.convertToModel(itemMetadata)));
+            .fileContents(Base64.getEncoder().encodeToString(toByteArray(fileContents.getContentStream(), itemId)))
+            .itemMetadata(ItemMetadataFunctions.convertToModel(itemMetadata)));
     }
 
-    private static Optional<byte[]> toByteArray(final OpenStreamFunction openStreamFunction, final String itemId)
+    @Nonnull
+    private static byte[] toByteArray(final OpenStreamFunction openStreamFunction, final String itemId)
     {
         try (final InputStream inputStream = openStreamFunction.openInputStream()) {
-            return Optional.of(IOUtils.toByteArray(inputStream));
+            return IOUtils.toByteArray(inputStream);
         } catch (final IOException ex) {
             LOGGER.warn("Exception reading {}", itemId, ex);
 
             // TODO: What should we do here?  Add a failure to the response?
-            return Optional.empty();
+            throw new UncheckedIOException(ex);
         }
     }
 

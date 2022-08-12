@@ -41,6 +41,7 @@ final class FileListResultsHandlerImpl extends FailureRegistrationImpl implement
     )
     {
         Objects.requireNonNull(itemMetadata);
+        Objects.requireNonNull(partitionHint);
         Objects.requireNonNull(cancellationToken);
 
         response.addItemsItem(new FileListItem()

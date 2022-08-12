@@ -18,8 +18,6 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryItem;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryProperties;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RetrieveFilesDataRequest;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 
@@ -38,11 +36,7 @@ final class RetrieveFilesDataRequestImpl implements RetrieveFilesDataRequest
     @Override
     public Iterable<RepositoryItem> getItems()
     {
-        final List<io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryItem> items = request.getItems();
-
-        return items == null
-            ? Collections.emptyList()
-            : items.stream().<RepositoryItem>map(RepositoryItemImpl::new)::iterator;
+        return request.getItems().stream().<RepositoryItem>map(RepositoryItemImpl::new)::iterator;
     }
 
     @Nonnull

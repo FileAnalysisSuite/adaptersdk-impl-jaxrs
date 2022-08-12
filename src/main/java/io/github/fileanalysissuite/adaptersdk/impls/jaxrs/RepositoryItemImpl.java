@@ -28,8 +28,6 @@ final class RepositoryItemImpl implements RepositoryItem
         final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryItem item
     )
     {
-        // TODO: The itemId and metadata properties are not marked required in the interface, and yet they are @Nonnull here
-        // https://github.com/FileAnalysisSuite/adapter-rest-contract/blob/9c4ee91849162e0a0c8c7cce4155547513e3ca5c/adapter-rest-contract/src/main/resources/io/github/fileanalysissuite/adapters/rest/contract/swagger.yaml#L164
         this.item = Objects.requireNonNull(item);
     }
 

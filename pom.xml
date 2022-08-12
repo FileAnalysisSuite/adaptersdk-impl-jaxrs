@@ -223,6 +223,37 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>update-openapi-codegen-files</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <properties>
+                                <property>
+                                    <name>openapiCodegenSrcDir</name>
+                                    <value>${project.build.directory}/openapi-codegen-src/jaxrs</value>
+                                </property>
+                            </properties>
+                            <scripts>
+                                <script><![CDATA[
+    def itemMetadataFile = new File(
+        openapiCodegenSrcDir + '/io/github/fileanalysissuite/adaptersdk/impls/jaxrs/internal/serverstubs/model/ItemMetadata.java')
+
+    // Remove an unused import
+    itemMetadataFile.write(itemMetadataFile.text.replace('import org.openapitools.jackson.nullable.JsonNullable;', ''))
+                                ]]>
+                                </script>
+                            </scripts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <executions>

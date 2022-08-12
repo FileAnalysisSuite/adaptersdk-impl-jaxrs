@@ -16,10 +16,12 @@
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.api.AdapterApi;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.AdapterDescriptor;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataRequest;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataResponse;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListRequest;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListResponse;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.AdapterDescriptorFunctions;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
 import java.util.Objects;
 import javax.annotation.Nonnull;
@@ -31,6 +33,13 @@ final class AdapterApiImpl implements AdapterApi
     public AdapterApiImpl(final RepositoryAdapter repositoryAdapter)
     {
         this.repositoryAdapter = Objects.requireNonNull(repositoryAdapter);
+    }
+
+    @Nonnull
+    @Override
+    public AdapterDescriptor adapterDescriptorGet()
+    {
+        return AdapterDescriptorFunctions.convertToModel(repositoryAdapter.createDescriptor());
     }
 
     @Nonnull

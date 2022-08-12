@@ -15,7 +15,6 @@
  */
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
-import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.ThrowableFunctions;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FailureDetails;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.FailureRegistration;
 import org.slf4j.Logger;
@@ -28,30 +27,29 @@ abstract class FailureRegistrationImpl implements FailureRegistration
     @Override
     public final void registerFailure(final String itemLocation, final FailureDetails failureDetails)
     {
-        // TODO: Logging item location because there doesn't seem to be a way to pass it back in the response...
-        LOGGER.warn("Registering failure for {}...", itemLocation);
-
-        registerFailureImpl(failureDetails);
+        registerFailureImpl(itemLocation, failureDetails);
     }
 
     @Override
     public final void registerFailure(final FailureDetails failureDetails)
     {
-        registerFailureImpl(failureDetails);
+        registerFailureImpl(null, failureDetails);
     }
 
-    private void registerFailureImpl(final FailureDetails failureDetails)
+    private void registerFailureImpl(final String itemLocation, final FailureDetails failureDetails)
     {
         final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails responseFailureDetails
             = new io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails();
 
+        responseFailureDetails.setItemLocation(itemLocation);
         responseFailureDetails.setMessage(failureDetails.getMessage());
 
         final Iterable<Exception> exceptions = failureDetails.getExceptions();
         if (exceptions != null) {
             for (final Exception exception : exceptions) {
-                final String exceptionString = exception.getMessage() + "\n===\n" + ThrowableFunctions.getStackTrace(exception);
-                responseFailureDetails.addExceptionsItem(exceptionString);
+                // TODO: What are we meant to do with the exceptions now that the exceptions array has been removed:
+                // https://github.com/FileAnalysisSuite/adapter-rest-contract/pull/8#discussion_r941539108
+                LOGGER.warn("Exception in failure details...", exception);
             }
         }
 

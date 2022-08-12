@@ -18,6 +18,7 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.ItemMetadata;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
@@ -64,22 +65,20 @@ final class ItemMetadataImpl implements ItemMetadata
     @Override
     public Instant getCreatedTime()
     {
-        // TODO: Check the actual format - better still put it in the contract
-        return Optional.ofNullable(metadata.getCreatedTime()).map(Instant::parse).orElse(null);
+        return Optional.ofNullable(metadata.getCreatedTime()).map(OffsetDateTime::toInstant).orElse(null);
     }
 
     @Override
     public Instant getAccessedTime()
     {
-        // TODO: Check the actual format - better still put it in the contract
-        return Optional.ofNullable(metadata.getAccessedTime()).map(Instant::parse).orElse(null);
+        return Optional.ofNullable(metadata.getAccessedTime()).map(OffsetDateTime::toInstant).orElse(null);
     }
 
     @Nonnull
     @Override
     public Instant getModifiedTime()
     {
-        return Instant.parse(metadata.getModifiedTime());
+        return metadata.getModifiedTime().toInstant();
     }
 
     @Override
