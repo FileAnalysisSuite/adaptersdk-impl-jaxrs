@@ -19,7 +19,6 @@ import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.m
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileDataItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataResponse;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.ItemMetadataFunctions;
-import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileContents;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.ItemMetadata;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.OpenStreamFunction;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.CancellationToken;
@@ -48,7 +47,7 @@ final class FileDataResultsHandlerImpl extends FailureRegistrationImpl implement
     @Override
     public void queueItem(
         final String itemId,
-        final FileContents fileContents,
+        final OpenStreamFunction fileContents,
         final ItemMetadata itemMetadata,
         final CancellationToken cancellationToken
     )
@@ -61,7 +60,7 @@ final class FileDataResultsHandlerImpl extends FailureRegistrationImpl implement
         // TODO: We're going to have to change this as we shouldn't be putting the entire contents of the file into a string
         response.addItemsItem(new FileDataItem()
             .itemId(itemId)
-            .fileContents(Base64.getEncoder().encodeToString(toByteArray(fileContents.getContentStream(), itemId)))
+            .fileContents(Base64.getEncoder().encodeToString(toByteArray(fileContents, itemId)))
             .itemMetadata(ItemMetadataFunctions.convertToModel(itemMetadata)));
     }
 
