@@ -195,6 +195,7 @@
                                 <interfaceOnly>true</interfaceOnly>
                                 <useSwaggerAnnotations>false</useSwaggerAnnotations>
                             </configOptions>
+                            <typeMappings>string+date-time=String</typeMappings>
                             <addCompileSourceRoot>false</addCompileSourceRoot>
                         </configuration>
                     </execution>
