@@ -1,5 +1,3 @@
-package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
-
 /*
  * Copyright 2022 Micro Focus or one of its affiliates.
  *
@@ -15,6 +13,9 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
+
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientAdapterDescriptor;
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientRepositorySettingDefinition;
