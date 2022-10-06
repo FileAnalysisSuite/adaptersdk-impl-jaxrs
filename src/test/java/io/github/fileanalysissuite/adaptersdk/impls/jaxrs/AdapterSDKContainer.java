@@ -16,26 +16,37 @@
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.api.AdapterApi;
+import jakarta.ws.rs.core.Application;
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.model.Resource;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
+import org.glassfish.jersey.test.spi.TestContainerFactory;
 
 import org.mockito.Mockito;
 
 public class AdapterSDKContainer extends JerseyTest
 {
     RepositoryAdapter adapter;
-
-    public AdapterSDKContainer()
-    {
+    
+    public AdapterSDKContainer(){
         super(new InMemoryTestContainerFactory());
     }
 
     @Override
-    protected ResourceConfig configure()
+    protected Application configure()
     {
         adapter = Mockito.mock(RepositoryAdapter.class);
-        return new ResourceConfig().register(new AdapterApiImpl(adapter));
+        return new ResourceConfig().register(new AbstractBinder(){
+            @Override
+            protected void configure()
+            {
+                bind(new AdapterApiImpl(adapter)).to(AdapterApiImpl.class);
+            }
+            
+        });
     }
 }
