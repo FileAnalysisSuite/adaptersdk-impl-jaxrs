@@ -13,65 +13,105 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
-import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientAdapterDescriptor;
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientRepositorySettingDefinition;
-import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.AdapterDescriptor;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.TypeCode;
+import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositorySettingDefinition;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.AdapterDescriptor;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryItem;
-import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListRequest;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryProperties;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListRequest;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataRequest;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataResponse;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListResponse;
 
 import org.junit.Test;
 import org.junit.BeforeClass;
-import static org.junit.Assert.assertTrue;
-import org.mockito.Mockito;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.Assert.assertEquals;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonArray;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 public class AdapterSDKTest extends AdapterSDKContainer
 {
-    public static AdapterDescriptor adapterDescriptor;
-    public static RetrieveFileListRequest retrieveFileListRequest;
-    public static RetrieveFileDataRequest retrieveFileDataRequest;
+    static RepositoryProperties repositoryProperties;
 
     @BeforeClass
     public static void setup()
     {
-        final RepositorySettingDefinition repositorySettingDefinition
-            = ConvenientRepositorySettingDefinition.create("MARK", TypeCode.TEXT, true, true);
-
-        adapterDescriptor = ConvenientAdapterDescriptor.create("TEST", repositorySettingDefinition);
-
         final Map<String, String> configurationOptions = new HashMap<>();
-        configurationOptions.put("a", "b");
-        configurationOptions.put("c", "d");
+        configurationOptions.put("configurationOptions", "configurationOptionsVal");
 
         final Map<String, String> repositoryOptions = new HashMap<>();
-        repositoryOptions.put("e", "f");
-        repositoryOptions.put("g", "h");
+        repositoryOptions.put("repositoryOptions", "repositoryOptionsVal");
 
-        final RepositoryProperties repositoryProperties
-            = new RepositoryProperties().configurationOptions(configurationOptions).repositoryOptions(repositoryOptions);
+        repositoryProperties = new RepositoryProperties().configurationOptions(configurationOptions).repositoryOptions(repositoryOptions);
+    }
 
-        retrieveFileListRequest
+    @Test
+    public void testAdapterDescriptorGet()
+    {
+        final RepositorySettingDefinition repositorySettingDefinition
+            = ConvenientRepositorySettingDefinition.create("name", TypeCode.TEXT, true, true);
+
+        final io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.AdapterDescriptor expectedAdapterDescriptor
+            = ConvenientAdapterDescriptor.create("adapterType", repositorySettingDefinition);
+
+        when(adapter.createDescriptor()).thenReturn(expectedAdapterDescriptor);
+
+        final AdapterDescriptor actualAdapterDescriptor = target("/adapterDescriptor").request().get(AdapterDescriptor.class);
+        assertEquals(expectedAdapterDescriptor.getAdapterType(), actualAdapterDescriptor.getAdapterType());
+
+        int expectedCount = 0;
+        final Iterator<RepositorySettingDefinition> expectedIterator = expectedAdapterDescriptor.getSettingDefinitions().iterator();
+
+        while (expectedIterator.hasNext()) {
+            final RepositorySettingDefinition expected = expectedIterator.next();
+            final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositorySettingDefinition actual
+                = actualAdapterDescriptor.getPropertyDefinition().get(expectedCount);
+            assertEquals(expected.getName(), actual.getName());
+            assertEquals(expected.isEncrypted(), Boolean.valueOf(actual.getIsEncrypted()));
+            assertEquals(expected.isRequired(), actual.getIsRequired());
+            expectedCount++;
+        }
+        assertEquals(expectedCount, actualAdapterDescriptor.getPropertyDefinition().size());
+    }
+
+    @Test
+    public void testRetrieveFileListPost()
+    {
+        doNothing().when(adapter).retrieveFileList(any(), any(), any());
+
+        final RetrieveFileListRequest retrieveFileListRequest
             = new RetrieveFileListRequest().additionalFilter("additionalFilter").repositoryProperties(repositoryProperties);
+
+        final Entity<RetrieveFileListRequest> retrieveFileListRequestJSON
+            = Entity.entity(retrieveFileListRequest, MediaType.APPLICATION_JSON_TYPE);
+
+        final RetrieveFileListResponse expectedRetrieveFileListResponse = new RetrieveFileListResponse();
+
+        final RetrieveFileListResponse actualRetrieveFileListResponse
+            = target("/retrieveFileList").request().post(retrieveFileListRequestJSON).readEntity(RetrieveFileListResponse.class);
+
+        assertEquals(expectedRetrieveFileListResponse, actualRetrieveFileListResponse);
+    }
+
+    @Test
+    public void testRetrieveFilesDataPost()
+    {
+        doNothing().when(adapter).retrieveFilesData(any(), any(), any());
 
         final ItemMetadata itemMetadata = new ItemMetadata()
             .accessedTime("accessedTime")
@@ -85,59 +125,17 @@ public class AdapterSDKTest extends AdapterSDKContainer
 
         final RepositoryItem repositoryItem = new RepositoryItem().itemId("itemId").metadata(itemMetadata);
 
-        retrieveFileDataRequest
+        final RetrieveFileDataRequest retrieveFileDataRequest
             = new RetrieveFileDataRequest().repositoryProperties(repositoryProperties).items(Arrays.asList(repositoryItem));
-    }
 
-    @Test
-    public void testAdapterDescriptorGet()
-    {
-        Mockito.when(adapter.createDescriptor()).thenReturn(adapterDescriptor);
+        final Entity<RetrieveFileDataRequest> retrieveFileDataRequestJSON
+            = Entity.entity(retrieveFileDataRequest, MediaType.APPLICATION_JSON_TYPE);
 
-        final Response response = target("/adapterDescriptor").request().get();
-        final JsonObject jsonResponse = JsonParser.parseString(response.readEntity(String.class)).getAsJsonObject();
+        final RetrieveFileDataResponse expectedRetrieveFileDataResponse = new RetrieveFileDataResponse();
 
-        assertTrue(jsonResponse.size() == 2);
-        assertTrue("TEST".equals(jsonResponse.get("adapterType").getAsString()));
+        final RetrieveFileDataResponse actualRetrieveFileDataResponse
+            = target("/retrieveFilesData").request().post(retrieveFileDataRequestJSON).readEntity(RetrieveFileDataResponse.class);
 
-        final JsonArray propertyDefinition = jsonResponse.getAsJsonArray("propertyDefinition");
-        assertTrue(propertyDefinition.size() == 1);
-
-        final JsonObject propertyDefinitionVals = propertyDefinition.get(0).getAsJsonObject();
-
-        assertTrue("MARK".equals(propertyDefinitionVals.get("name").getAsString()));
-        assertTrue(propertyDefinitionVals.get("isRequired").getAsBoolean() == true);
-        assertTrue("true".equals(propertyDefinitionVals.get("isEncrypted").getAsString()));
-        assertTrue(response.getStatus() == 200);
-    }
-
-    @Test
-    public void testRetrieveFileListPost()
-    {
-        Mockito.doNothing().when(adapter).retrieveFileList(any(), any(), any());
-
-        final Entity<RetrieveFileListRequest> rEntity = Entity.entity(retrieveFileListRequest, MediaType.APPLICATION_JSON_TYPE);
-
-        final Response response = target("/retrieveFileList").request().post(rEntity);
-        final JsonObject json = JsonParser.parseString(response.readEntity(String.class)).getAsJsonObject();
-
-        assertTrue(json.size() == 2);
-        assertTrue(json.get("items").getAsJsonArray().size() == 0);
-        assertTrue(json.get("failures").getAsJsonArray().size() == 0);
-    }
-
-    @Test
-    public void testRetrieveFilesDataPost()
-    {
-        Mockito.doNothing().when(adapter).retrieveFilesData(any(), any(), any());
-
-        final Entity<RetrieveFileDataRequest> rEntity = Entity.entity(retrieveFileDataRequest, MediaType.APPLICATION_JSON_TYPE);
-
-        final Response response = target("/retrieveFilesData").request().post(rEntity);
-        final JsonObject json = JsonParser.parseString(response.readEntity(String.class)).getAsJsonObject();
-
-        assertTrue(json.size() == 2);
-        assertTrue(json.get("items").getAsJsonArray().size() == 0);
-        assertTrue(json.get("failures").getAsJsonArray().size() == 0);
+        assertEquals(expectedRetrieveFileDataResponse, actualRetrieveFileDataResponse);
     }
 }

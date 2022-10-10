@@ -21,7 +21,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
 
-import org.mockito.Mockito;
+import static org.mockito.Mockito.mock;
 
 public class AdapterSDKContainer extends JerseyTest
 {
@@ -35,7 +35,7 @@ public class AdapterSDKContainer extends JerseyTest
     @Override
     protected ResourceConfig configure()
     {
-        adapter = Mockito.mock(RepositoryAdapter.class);
+        adapter = mock(RepositoryAdapter.class);
         return new ResourceConfig().register(new AdapterApiImpl(adapter));
     }
 }
