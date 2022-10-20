@@ -15,11 +15,9 @@
  */
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
-import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientAdapterDescriptor;
-import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientRepositorySettingDefinition;
-import io.github.fileanalysissuite.adaptersdk.interfaces.framework.TypeCode;
-import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.AdapterDescriptor;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileDataItem;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileListItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryProperties;
@@ -27,19 +25,23 @@ import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.m
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataRequest;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataResponse;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListResponse;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import org.junit.Test;
 import org.junit.BeforeClass;
 import static org.junit.Assert.assertEquals;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
 import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -47,83 +49,67 @@ import javax.ws.rs.core.MediaType;
 public class AdapterSDKTest extends AdapterSDKContainer
 {
     static RepositoryProperties repositoryProperties;
+    static ItemMetadata itemMetadata;
 
     @BeforeClass
-    public static void setup()
+    public static void setup() throws IOException
     {
+        //does nothing currently???
         final Map<String, String> configurationOptions = new HashMap<>();
         configurationOptions.put("configurationOptions", "configurationOptionsVal");
 
         final Map<String, String> repositoryOptions = new HashMap<>();
-        repositoryOptions.put("repositoryOptions", "repositoryOptionsVal");
+        repositoryOptions.put("Path", filePathString);
+
+        BasicFileAttributes basicFileAttributes = Files.readAttributes(path, BasicFileAttributes.class);
+
+        itemMetadata = new ItemMetadata()
+            .itemLocation(filePathString + "\\test.txt")
+            .name("test.txt")
+            .title(null)
+            .size(Long.valueOf(9))
+            .createdTime(basicFileAttributes.creationTime().toString())
+            .accessedTime(basicFileAttributes.lastAccessTime().toString())
+            .modifiedTime(basicFileAttributes.lastModifiedTime().toString())
+            .version(null)
+            .additionalMetadata(Collections.emptyMap());
 
         repositoryProperties = new RepositoryProperties().configurationOptions(configurationOptions).repositoryOptions(repositoryOptions);
     }
 
     @Test
-    public void testAdapterDescriptorGet()
+    public void testAdapterDescriptor()
     {
-        final RepositorySettingDefinition repositorySettingDefinition
-            = ConvenientRepositorySettingDefinition.create("name", TypeCode.TEXT, true, true);
-
-        final io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.AdapterDescriptor expectedAdapterDescriptor
-            = ConvenientAdapterDescriptor.create("adapterType", repositorySettingDefinition);
-
-        when(adapter.createDescriptor()).thenReturn(expectedAdapterDescriptor);
-
         final AdapterDescriptor actualAdapterDescriptor = target("/adapterDescriptor").request().get(AdapterDescriptor.class);
-        assertEquals(expectedAdapterDescriptor.getAdapterType(), actualAdapterDescriptor.getAdapterType());
-
-        int expectedCount = 0;
-        final Iterator<RepositorySettingDefinition> expectedIterator = expectedAdapterDescriptor.getSettingDefinitions().iterator();
-
-        while (expectedIterator.hasNext()) {
-            final RepositorySettingDefinition expected = expectedIterator.next();
-            final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositorySettingDefinition actual
-                = actualAdapterDescriptor.getPropertyDefinition().get(expectedCount);
-            assertEquals(expected.getName(), actual.getName());
-            assertEquals(expected.isEncrypted(), Boolean.valueOf(actual.getIsEncrypted()));
-            assertEquals(expected.isRequired(), actual.getIsRequired());
-            expectedCount++;
-        }
-        assertEquals(expectedCount, actualAdapterDescriptor.getPropertyDefinition().size());
+        assertEquals("FakeFileSystem", actualAdapterDescriptor.getAdapterType());
+        assertEquals(Collections.emptyList(), actualAdapterDescriptor.getPropertyDefinition());
     }
 
     @Test
-    public void testRetrieveFileListPost()
+    public void testRetrieveFileList()
     {
-        doNothing().when(adapter).retrieveFileList(any(), any(), any());
-
         final RetrieveFileListRequest retrieveFileListRequest
             = new RetrieveFileListRequest().additionalFilter("additionalFilter").repositoryProperties(repositoryProperties);
-
+        
         final Entity<RetrieveFileListRequest> retrieveFileListRequestJSON
             = Entity.entity(retrieveFileListRequest, MediaType.APPLICATION_JSON_TYPE);
-
-        final RetrieveFileListResponse expectedRetrieveFileListResponse = new RetrieveFileListResponse();
-
+        
         final RetrieveFileListResponse actualRetrieveFileListResponse
             = target("/retrieveFileList").request().post(retrieveFileListRequestJSON).readEntity(RetrieveFileListResponse.class);
 
-        assertEquals(expectedRetrieveFileListResponse, actualRetrieveFileListResponse);
+        assertEquals(Collections.emptyList(), actualRetrieveFileListResponse.getFailures());
+        
+        final List<FileListItem> items = actualRetrieveFileListResponse.getItems();
+        final FileListItem item = items.get(0);
+        assertEquals(1, items.size());
+        assertEquals("-", item.getPartitionHint());
+        assertEquals(itemMetadata, item.getItemMetadata());
     }
 
     @Test
-    public void testRetrieveFilesDataPost()
+    public void testRetrieveFilesData()
     {
-        doNothing().when(adapter).retrieveFilesData(any(), any(), any());
-
-        final ItemMetadata itemMetadata = new ItemMetadata()
-            .accessedTime("accessedTime")
-            .createdTime("createdTime")
-            .itemLocation("itemLocation")
-            .modifiedTime("modifiedTime")
-            .name("name")
-            .size(Long.MIN_VALUE)
-            .title("title")
-            .version(Integer.SIZE);
-
-        final RepositoryItem repositoryItem = new RepositoryItem().itemId("itemId").metadata(itemMetadata);
+        final RepositoryItem repositoryItem = new RepositoryItem().itemId("test.txt").metadata(itemMetadata);
 
         final RetrieveFileDataRequest retrieveFileDataRequest
             = new RetrieveFileDataRequest().repositoryProperties(repositoryProperties).items(Arrays.asList(repositoryItem));
@@ -131,11 +117,15 @@ public class AdapterSDKTest extends AdapterSDKContainer
         final Entity<RetrieveFileDataRequest> retrieveFileDataRequestJSON
             = Entity.entity(retrieveFileDataRequest, MediaType.APPLICATION_JSON_TYPE);
 
-        final RetrieveFileDataResponse expectedRetrieveFileDataResponse = new RetrieveFileDataResponse();
-
         final RetrieveFileDataResponse actualRetrieveFileDataResponse
             = target("/retrieveFilesData").request().post(retrieveFileDataRequestJSON).readEntity(RetrieveFileDataResponse.class);
 
-        assertEquals(expectedRetrieveFileDataResponse, actualRetrieveFileDataResponse);
+        final List<FileDataItem> items = actualRetrieveFileDataResponse.getItems();
+        final FileDataItem item = items.get(0);
+        assertEquals(1, items.size());
+        assertEquals(repositoryItem.getItemId(), item.getItemId());
+        final String expectedFileContent = Base64.getEncoder().encodeToString("Test text".getBytes());
+        assertEquals(expectedFileContent, item.getFileContents());
+        assertEquals(itemMetadata, item.getItemMetadata());
     }
 }
