@@ -16,19 +16,17 @@
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.AdapterDescriptor;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileDataItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileListItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryProperties;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListRequest;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataRequest;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataResponse;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListResponse;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.attribute.BasicFileAttributes;
 
 import org.junit.Test;
 import org.junit.BeforeClass;
@@ -40,8 +38,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.IOException;
+import java.time.Instant;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -50,39 +48,44 @@ public class AdapterSDKTest extends AdapterSDKContainer
 {
     static RepositoryProperties repositoryProperties;
     static ItemMetadata itemMetadata;
+    static List<FailureDetails> failureDetails;
 
     @BeforeClass
     public static void setup() throws IOException
     {
-        //does nothing currently???
         final Map<String, String> configurationOptions = new HashMap<>();
         configurationOptions.put("configurationOptions", "configurationOptionsVal");
 
         final Map<String, String> repositoryOptions = new HashMap<>();
-        repositoryOptions.put("Path", filePathString);
-
-        BasicFileAttributes basicFileAttributes = Files.readAttributes(path, BasicFileAttributes.class);
+        repositoryOptions.put("Path", "Fake path");
 
         itemMetadata = new ItemMetadata()
-            .itemLocation(filePathString + "\\test.txt")
-            .name("test.txt")
-            .title(null)
-            .size(Long.valueOf(9))
-            .createdTime(basicFileAttributes.creationTime().toString())
-            .accessedTime(basicFileAttributes.lastAccessTime().toString())
-            .modifiedTime(basicFileAttributes.lastModifiedTime().toString())
-            .version(null)
-            .additionalMetadata(Collections.emptyMap());
+            .itemLocation("Fake path")
+            .name("Fake name")
+            .title("Fake title")
+            .size(9L)
+            .createdTime(Instant.MIN.toString())
+            .accessedTime(Instant.MAX.toString())
+            .modifiedTime(Instant.EPOCH.toString())
+            .version(2)
+            .additionalMetadata(Collections.singletonMap("Fake key", "Fake value"));
 
         repositoryProperties = new RepositoryProperties().configurationOptions(configurationOptions).repositoryOptions(repositoryOptions);
+
+        failureDetails = Arrays.asList(new FailureDetails().itemLocation("Fake item location").message("Failed to read item attributes"));
     }
 
     @Test
     public void testAdapterDescriptor()
     {
+        final List<RepositorySettingDefinition> settings = Arrays.asList(new RepositorySettingDefinition()
+            .name("Fake name")
+            .isRequired(true)
+            .isEncrypted("true"));
+
         final AdapterDescriptor actualAdapterDescriptor = target("/adapterDescriptor").request().get(AdapterDescriptor.class);
-        assertEquals("FakeFileSystem", actualAdapterDescriptor.getAdapterType());
-        assertEquals(Collections.emptyList(), actualAdapterDescriptor.getPropertyDefinition());
+        assertEquals("FakeRepositoryAdapter", actualAdapterDescriptor.getAdapterType());
+        assertEquals(settings, actualAdapterDescriptor.getPropertyDefinition());
     }
 
     @Test
@@ -90,15 +93,14 @@ public class AdapterSDKTest extends AdapterSDKContainer
     {
         final RetrieveFileListRequest retrieveFileListRequest
             = new RetrieveFileListRequest().additionalFilter("additionalFilter").repositoryProperties(repositoryProperties);
-        
+
         final Entity<RetrieveFileListRequest> retrieveFileListRequestJSON
             = Entity.entity(retrieveFileListRequest, MediaType.APPLICATION_JSON_TYPE);
-        
+
         final RetrieveFileListResponse actualRetrieveFileListResponse
             = target("/retrieveFileList").request().post(retrieveFileListRequestJSON).readEntity(RetrieveFileListResponse.class);
 
-        assertEquals(Collections.emptyList(), actualRetrieveFileListResponse.getFailures());
-        
+        assertEquals(failureDetails, actualRetrieveFileListResponse.getFailures());
         final List<FileListItem> items = actualRetrieveFileListResponse.getItems();
         final FileListItem item = items.get(0);
         assertEquals(1, items.size());
@@ -120,11 +122,12 @@ public class AdapterSDKTest extends AdapterSDKContainer
         final RetrieveFileDataResponse actualRetrieveFileDataResponse
             = target("/retrieveFilesData").request().post(retrieveFileDataRequestJSON).readEntity(RetrieveFileDataResponse.class);
 
+        assertEquals(failureDetails, actualRetrieveFileDataResponse.getFailures());
         final List<FileDataItem> items = actualRetrieveFileDataResponse.getItems();
         final FileDataItem item = items.get(0);
         assertEquals(1, items.size());
         assertEquals(repositoryItem.getItemId(), item.getItemId());
-        final String expectedFileContent = Base64.getEncoder().encodeToString("Test text".getBytes());
+        final String expectedFileContent = Base64.getEncoder().encodeToString("Fake contents".getBytes());
         assertEquals(expectedFileContent, item.getFileContents());
         assertEquals(itemMetadata, item.getItemMetadata());
     }

@@ -21,14 +21,9 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 public class AdapterSDKContainer extends JerseyTest
 {
     RepositoryAdapter adapter;
-    static String filePathString = System.getProperty("user.dir") + "\\src\\test\\resources";
-    static Path path = Paths.get(filePathString);
 
     public AdapterSDKContainer()
     {
@@ -38,7 +33,7 @@ public class AdapterSDKContainer extends JerseyTest
     @Override
     protected ResourceConfig configure()
     {
-        adapter = new FakeRepositoryAdapter(path);
+        adapter = new FakeRepositoryAdapter();
         return new ResourceConfig().register(new AdapterApiImpl(adapter));
     }
 }
