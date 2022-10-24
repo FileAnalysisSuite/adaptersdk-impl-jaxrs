@@ -15,14 +15,12 @@
  */
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
-import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.AdapterDescriptor;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileDataItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileListItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryProperties;
-import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListRequest;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataRequest;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataResponse;
@@ -35,16 +33,14 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.io.IOException;
 import java.time.Instant;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
-public class AdapterSDKTest extends AdapterSDKContainer
+public class AdapterSDKFakeTest extends AdapterSDKFakeContainer
 {
     static RepositoryProperties repositoryProperties;
     static ItemMetadata itemMetadata;
@@ -53,12 +49,6 @@ public class AdapterSDKTest extends AdapterSDKContainer
     @BeforeClass
     public static void setup() throws IOException
     {
-        final Map<String, String> configurationOptions = new HashMap<>();
-        configurationOptions.put("configurationOptions", "configurationOptionsVal");
-
-        final Map<String, String> repositoryOptions = new HashMap<>();
-        repositoryOptions.put("Path", "Fake path");
-
         itemMetadata = new ItemMetadata()
             .itemLocation("Fake path")
             .name("Fake name")
@@ -70,29 +60,16 @@ public class AdapterSDKTest extends AdapterSDKContainer
             .version(2)
             .additionalMetadata(Collections.singletonMap("Fake key", "Fake value"));
 
-        repositoryProperties = new RepositoryProperties().configurationOptions(configurationOptions).repositoryOptions(repositoryOptions);
+        repositoryProperties = new RepositoryProperties().repositoryOptions(Collections.singletonMap("Path", "Fake path"));
 
         failureDetails = Arrays.asList(new FailureDetails().itemLocation("Fake item location").message("Failed to read item attributes"));
     }
 
     @Test
-    public void testAdapterDescriptor()
-    {
-        final List<RepositorySettingDefinition> settings = Arrays.asList(new RepositorySettingDefinition()
-            .name("Fake name")
-            .isRequired(true)
-            .isEncrypted("true"));
-
-        final AdapterDescriptor actualAdapterDescriptor = target("/adapterDescriptor").request().get(AdapterDescriptor.class);
-        assertEquals("FakeRepositoryAdapter", actualAdapterDescriptor.getAdapterType());
-        assertEquals(settings, actualAdapterDescriptor.getPropertyDefinition());
-    }
-
-    @Test
-    public void testRetrieveFileList()
+    public void testRetrieveFileListPost()
     {
         final RetrieveFileListRequest retrieveFileListRequest
-            = new RetrieveFileListRequest().additionalFilter("additionalFilter").repositoryProperties(repositoryProperties);
+            = new RetrieveFileListRequest().repositoryProperties(repositoryProperties);
 
         final Entity<RetrieveFileListRequest> retrieveFileListRequestJSON
             = Entity.entity(retrieveFileListRequest, MediaType.APPLICATION_JSON_TYPE);
@@ -109,7 +86,7 @@ public class AdapterSDKTest extends AdapterSDKContainer
     }
 
     @Test
-    public void testRetrieveFilesData()
+    public void testRetrieveFilesDataPost()
     {
         final RepositoryItem repositoryItem = new RepositoryItem().itemId("test.txt").metadata(itemMetadata);
 

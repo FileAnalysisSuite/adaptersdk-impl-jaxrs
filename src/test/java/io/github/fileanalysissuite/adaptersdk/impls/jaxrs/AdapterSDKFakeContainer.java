@@ -21,11 +21,11 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
 
-public class AdapterSDKContainer extends JerseyTest
+public class AdapterSDKFakeContainer extends JerseyTest
 {
-    RepositoryAdapter adapter;
+    RepositoryAdapter fakeAdapter;
 
-    public AdapterSDKContainer()
+    public AdapterSDKFakeContainer()
     {
         super(new InMemoryTestContainerFactory());
     }
@@ -33,7 +33,7 @@ public class AdapterSDKContainer extends JerseyTest
     @Override
     protected ResourceConfig configure()
     {
-        adapter = new FakeRepositoryAdapter();
-        return new ResourceConfig().register(new AdapterApiImpl(adapter));
+        fakeAdapter = new FakeRepositoryAdapter();
+        return new ResourceConfig().register(new AdapterApiImpl(fakeAdapter));
     }
 }
