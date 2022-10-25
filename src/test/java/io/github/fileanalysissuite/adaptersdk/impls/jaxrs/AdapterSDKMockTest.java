@@ -19,15 +19,33 @@ import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientAdapterDescr
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientRepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.AdapterDescriptor;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.AdapterDescriptorFunctions;
+import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.TypeCode;
-
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AdapterSDKMockTest extends AdapterSDKMockContainer
+public class AdapterSDKMockTest extends JerseyTest
 {
+    RepositoryAdapter mockAdapter;
+
+    public AdapterSDKMockTest()
+    {
+        super(new InMemoryTestContainerFactory());
+    }
+
+    @Override
+    protected ResourceConfig configure()
+    {
+        mockAdapter = mock(RepositoryAdapter.class);
+        return new ResourceConfig().registerInstances(AdapterSdk.wrap(mockAdapter));
+    }
+
     @Test
     public void testAdapterDescriptorGet()
     {
@@ -43,6 +61,6 @@ public class AdapterSDKMockTest extends AdapterSDKMockContainer
 
         final AdapterDescriptor expectedDescriptor = AdapterDescriptorFunctions.convertToModel(descriptor);
 
-        assertEquals(expectedDescriptor, actualDescriptor);
+        assertThat(actualDescriptor, equalTo(expectedDescriptor));
     }
 }

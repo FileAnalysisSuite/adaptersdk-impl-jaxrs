@@ -25,10 +25,7 @@ import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.m
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataRequest;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataResponse;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListResponse;
-
-import org.junit.Test;
-import org.junit.BeforeClass;
-import static org.junit.Assert.assertEquals;
+import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
 
 import java.util.Arrays;
 import java.util.Base64;
@@ -40,13 +37,34 @@ import java.time.Instant;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 
-public class AdapterSDKFakeTest extends AdapterSDKFakeContainer
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+public class AdapterSDKFakeTest extends JerseyTest
 {
     static RepositoryProperties repositoryProperties;
     static ItemMetadata itemMetadata;
     static List<FailureDetails> failureDetails;
+    RepositoryAdapter fakeAdapter;
 
-    @BeforeClass
+    public AdapterSDKFakeTest()
+    {
+        super(new InMemoryTestContainerFactory());
+    }
+
+    @Override
+    protected ResourceConfig configure()
+    {
+        fakeAdapter = new FakeRepositoryAdapter();
+        return new ResourceConfig().registerInstances(AdapterSdk.wrap(fakeAdapter));
+    }
+
+    @BeforeAll
     public static void setup() throws IOException
     {
         itemMetadata = new ItemMetadata()
@@ -77,12 +95,12 @@ public class AdapterSDKFakeTest extends AdapterSDKFakeContainer
         final RetrieveFileListResponse actualRetrieveFileListResponse
             = target("/retrieveFileList").request().post(retrieveFileListRequestJSON).readEntity(RetrieveFileListResponse.class);
 
-        assertEquals(failureDetails, actualRetrieveFileListResponse.getFailures());
+        assertThat(failureDetails, equalTo(actualRetrieveFileListResponse.getFailures()));
         final List<FileListItem> items = actualRetrieveFileListResponse.getItems();
         final FileListItem item = items.get(0);
-        assertEquals(1, items.size());
-        assertEquals("-", item.getPartitionHint());
-        assertEquals(itemMetadata, item.getItemMetadata());
+        assertThat(items.size(), equalTo(1));
+        assertThat(item.getPartitionHint(), equalTo("-"));
+        assertThat(item.getItemMetadata(), equalTo(itemMetadata));
     }
 
     @Test
@@ -99,13 +117,13 @@ public class AdapterSDKFakeTest extends AdapterSDKFakeContainer
         final RetrieveFileDataResponse actualRetrieveFileDataResponse
             = target("/retrieveFilesData").request().post(retrieveFileDataRequestJSON).readEntity(RetrieveFileDataResponse.class);
 
-        assertEquals(failureDetails, actualRetrieveFileDataResponse.getFailures());
+        assertThat(actualRetrieveFileDataResponse.getFailures(), equalTo(failureDetails));
         final List<FileDataItem> items = actualRetrieveFileDataResponse.getItems();
         final FileDataItem item = items.get(0);
-        assertEquals(1, items.size());
-        assertEquals(repositoryItem.getItemId(), item.getItemId());
+        assertThat(items.size(), equalTo(1));
+        assertThat(item.getItemId(), equalTo(repositoryItem.getItemId()));
         final String expectedFileContent = Base64.getEncoder().encodeToString("Fake contents".getBytes());
-        assertEquals(expectedFileContent, item.getFileContents());
-        assertEquals(itemMetadata, item.getItemMetadata());
+        assertThat(item.getFileContents(), equalTo(expectedFileContent));
+        assertThat(item.getItemMetadata(), equalTo(itemMetadata));
     }
 }
