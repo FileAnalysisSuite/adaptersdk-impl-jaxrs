@@ -39,7 +39,7 @@ import java.time.Instant;
 
 import javax.annotation.Nonnull;
 
-public final class FakeRepositoryAdapter implements RepositoryAdapter
+final class FakeRepositoryAdapter implements RepositoryAdapter
 {
     @Nonnull
     @Override
