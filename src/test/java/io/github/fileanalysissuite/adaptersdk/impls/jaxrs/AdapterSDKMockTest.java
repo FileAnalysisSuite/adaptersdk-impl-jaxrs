@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AdapterSDKMockTest extends JerseyTest
+class AdapterSDKMockTest extends JerseyTest
 {
     RepositoryAdapter mockAdapter;
 
@@ -47,7 +47,7 @@ public class AdapterSDKMockTest extends JerseyTest
     }
 
     @Test
-    public void testAdapterDescriptorGet()
+    void testAdapterDescriptorGet()
     {
         final io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositorySettingDefinition repoSettingDefinition
             = ConvenientRepositorySettingDefinition.create("Fake name", TypeCode.TEXT, true, true);

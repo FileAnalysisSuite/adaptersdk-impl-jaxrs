@@ -45,7 +45,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class AdapterSDKFakeTest extends JerseyTest
+class AdapterSDKFakeTest extends JerseyTest
 {
     static RepositoryProperties repositoryProperties;
     static ItemMetadata itemMetadata;
@@ -84,7 +84,7 @@ public class AdapterSDKFakeTest extends JerseyTest
     }
 
     @Test
-    public void testRetrieveFileListPost()
+    void testRetrieveFileListPost()
     {
         final RetrieveFileListRequest retrieveFileListRequest
             = new RetrieveFileListRequest().repositoryProperties(repositoryProperties);
@@ -104,7 +104,7 @@ public class AdapterSDKFakeTest extends JerseyTest
     }
 
     @Test
-    public void testRetrieveFilesDataPost()
+    void testRetrieveFilesDataPost()
     {
         final RepositoryItem repositoryItem = new RepositoryItem().itemId("test.txt").metadata(itemMetadata);
 
