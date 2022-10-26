@@ -65,7 +65,7 @@ final class AdapterSDKFakeTest extends JerseyTest
     }
 
     @BeforeAll
-    public static void setup() throws IOException
+    static void setup() throws IOException
     {
         itemMetadata = new ItemMetadata()
             .itemLocation("Fake path")
