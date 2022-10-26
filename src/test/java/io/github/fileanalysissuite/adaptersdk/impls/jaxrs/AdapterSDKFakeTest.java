@@ -45,12 +45,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class AdapterSDKFakeTest extends JerseyTest
+final class AdapterSDKFakeTest extends JerseyTest
 {
-    static RepositoryProperties repositoryProperties;
-    static ItemMetadata itemMetadata;
-    static List<FailureDetails> failureDetails;
-    RepositoryAdapter fakeAdapter;
+    private static RepositoryProperties repositoryProperties;
+    private static ItemMetadata itemMetadata;
+    private static List<FailureDetails> failureDetails;
+    private RepositoryAdapter fakeAdapter;
 
     public AdapterSDKFakeTest()
     {

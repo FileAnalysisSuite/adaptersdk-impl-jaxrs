@@ -57,7 +57,8 @@ final class FakeRepositoryAdapter implements RepositoryAdapter
     )
     {
         final OptionsProvider repositoryOptions = request.getRepositoryProperties().getRepositoryOptions();
-        ItemMetadata itemMetadata = ConvenientItemMetadata.builder()
+
+        final ItemMetadata itemMetadata = ConvenientItemMetadata.builder()
             .itemLocation(repositoryOptions.getOption("Path").get())
             .name("Fake name")
             .title("Fake title")

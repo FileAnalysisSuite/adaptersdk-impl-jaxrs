@@ -30,9 +30,9 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class AdapterSDKMockTest extends JerseyTest
+final class AdapterSDKMockTest extends JerseyTest
 {
-    RepositoryAdapter mockAdapter;
+    private RepositoryAdapter mockAdapter;
 
     public AdapterSDKMockTest()
     {
