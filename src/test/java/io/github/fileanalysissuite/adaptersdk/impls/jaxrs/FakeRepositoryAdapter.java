@@ -35,6 +35,7 @@ import io.github.fileanalysissuite.adaptersdk.interfaces.framework.TypeCode;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 
 import javax.annotation.Nonnull;
@@ -84,7 +85,8 @@ final class FakeRepositoryAdapter implements RepositoryAdapter
         for (final RepositoryItem item : request.getItems()) {
             final String itemId = item.getItemId();
             final ItemMetadata itemMetadata = item.getMetadata();
-            final OpenStreamFunction contentStream = () -> new BufferedInputStream(new ByteArrayInputStream("Fake contents".getBytes()));
+            final OpenStreamFunction contentStream
+                = () -> new BufferedInputStream(new ByteArrayInputStream("Fake contents".getBytes(StandardCharsets.UTF_8)));
 
             handler.queueItem(itemId, contentStream, itemMetadata, cancellationToken);
             handler.registerFailure("Fake item location", ConvenientFailureDetails.create("Failed to read item attributes"));
