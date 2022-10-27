@@ -18,7 +18,7 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientAdapterDescriptor;
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientRepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.AdapterDescriptor;
-import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.AdapterDescriptorFunctions;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.TypeCode;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -59,7 +59,14 @@ final class AdapterSDKMockTest extends JerseyTest
 
         final AdapterDescriptor actualDescriptor = target("/adapterDescriptor").request().get(AdapterDescriptor.class);
 
-        final AdapterDescriptor expectedDescriptor = AdapterDescriptorFunctions.convertToModel(descriptor);
+        final RepositorySettingDefinition expectedRepoSettingDefinition = new RepositorySettingDefinition()
+            .name("Fake name")
+            .isEncrypted("true")
+            .isRequired(true);
+
+        final AdapterDescriptor expectedDescriptor = new AdapterDescriptor()
+            .adapterType("Fake adapter type")
+            .addPropertyDefinitionItem(expectedRepoSettingDefinition);
 
         assertThat(actualDescriptor, equalTo(expectedDescriptor));
     }
