@@ -18,9 +18,13 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientAdapterDescriptor;
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientRepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.AdapterDescriptor;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.TypeCode;
+
+import java.time.Instant;
+
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
@@ -69,5 +73,26 @@ final class AdapterSDKMockTest extends JerseyTest
             .addPropertyDefinitionItem(expectedRepoSettingDefinition);
 
         assertThat(actualDescriptor, equalTo(expectedDescriptor));
+    }
+
+    @Test
+    void testParseMinInstantCreatedTime(){
+        final ItemMetadata metadata = new ItemMetadata().createdTime("-1000000000-01-01T00:00Z");
+        final ItemMetadataImpl metadataImpl = new ItemMetadataImpl(metadata);
+        assertThat(metadataImpl.getCreatedTime(), equalTo(Instant.MIN));
+    }
+    
+    @Test
+    void testParseMaxInstantAccessedTime(){
+        final ItemMetadata metadata = new ItemMetadata().accessedTime("1000000000-12-31T23:59:59.999999999Z");
+        final ItemMetadataImpl metadataImpl = new ItemMetadataImpl(metadata);
+        assertThat(metadataImpl.getAccessedTime(), equalTo(Instant.MAX));
+    }
+    
+    @Test
+    void testParseValidInstantAccessedTime(){
+        final ItemMetadata metadata = new ItemMetadata().accessedTime("1970-01-01T00:00:00Z");
+        final ItemMetadataImpl metadataImpl = new ItemMetadataImpl(metadata);
+        assertThat(metadataImpl.getAccessedTime(), equalTo(Instant.EPOCH));
     }
 }

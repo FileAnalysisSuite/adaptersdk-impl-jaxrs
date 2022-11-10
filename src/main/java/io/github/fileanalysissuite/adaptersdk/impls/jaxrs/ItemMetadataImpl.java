@@ -64,13 +64,13 @@ final class ItemMetadataImpl implements ItemMetadata
     @Override
     public Instant getCreatedTime()
     {
-        return Optional.ofNullable(metadata.getCreatedTime()).map(Instant::parse).orElse(null);
+        return Optional.ofNullable(metadata.getCreatedTime()).map(t -> parseStringToInstant(t)).orElse(null);
     }
 
     @Override
     public Instant getAccessedTime()
     {
-        return Optional.ofNullable(metadata.getAccessedTime()).map(Instant::parse).orElse(null);
+        return Optional.ofNullable(metadata.getAccessedTime()).map(t -> parseStringToInstant(t)).orElse(null);
     }
 
     @Nonnull
@@ -109,5 +109,17 @@ final class ItemMetadataImpl implements ItemMetadata
         return additionalMetadata == null
             ? Collections.emptyMap()
             : Collections.unmodifiableMap(additionalMetadata);
+    }
+    
+    private Instant parseStringToInstant(final String time)
+    {
+        switch (time) {
+            case "-1000000000-01-01T00:00Z":
+                return Instant.MIN;
+            case "1000000000-12-31T23:59:59.999999999Z":
+                return Instant.MAX;
+            default:
+                return Instant.parse(time);
+        }
     }
 }
