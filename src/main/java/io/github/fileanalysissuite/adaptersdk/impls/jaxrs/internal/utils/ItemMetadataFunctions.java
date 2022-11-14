@@ -42,8 +42,8 @@ public final class ItemMetadataFunctions
                 .name(itemMetadata.getName())
                 .title(itemMetadata.getTitle())
                 .size(itemMetadata.getSize())
-                .createdTime(Optional.ofNullable(itemMetadata.getCreatedTime()).map(Instant::toString).orElse(null))
-                .accessedTime(Optional.ofNullable(itemMetadata.getAccessedTime()).map(Instant::toString).orElse(null))
+                .createdTime(Optional.ofNullable(itemMetadata.getCreatedTime()).map(t -> toRFC3339DateTimeString(t)).orElse(null))
+                .accessedTime(Optional.ofNullable(itemMetadata.getAccessedTime()).map(t -> toRFC3339DateTimeString(t)).orElse(null))
                 .modifiedTime(itemMetadata.getModifiedTime().toString())
                 .version(itemMetadata.getVersion());
 
@@ -59,5 +59,19 @@ public final class ItemMetadataFunctions
         }
 
         return modelItemMetadata;
+    }
+
+    public static String toRFC3339DateTimeString(final Instant time)
+    {
+        final String minRFC3339DateTime = "0000-01-01T00:00:00Z";
+        final String maxRFC3339DateTime = "9999-12-31T23:59:59Z";
+
+        if (time.isBefore(Instant.parse(minRFC3339DateTime))) {
+            return minRFC3339DateTime;
+        } else if (time.isAfter(Instant.parse(maxRFC3339DateTime))) {
+            return maxRFC3339DateTime;
+        } else {
+            return time.toString();
+        }
     }
 }
