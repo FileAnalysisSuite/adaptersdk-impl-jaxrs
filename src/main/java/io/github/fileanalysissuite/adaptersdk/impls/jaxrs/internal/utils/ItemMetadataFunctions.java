@@ -63,13 +63,10 @@ public final class ItemMetadataFunctions
 
     private static String toRFC3339DateTimeString(final Instant time)
     {
-        final String minRFC3339DateTime = "0000-01-01T00:00:00Z";
-        final String maxRFC3339DateTime = "9999-12-31T23:59:59Z";
-
-        if (time.isBefore(Instant.parse(minRFC3339DateTime))) {
-            return minRFC3339DateTime;
-        } else if (time.isAfter(Instant.parse(maxRFC3339DateTime))) {
-            return maxRFC3339DateTime;
+        if (time.isBefore(Instant.ofEpochSecond(-62167219200L))) {
+            return "0000-01-01T00:00:00Z";
+        } else if (time.isAfter(Instant.ofEpochSecond(253402300799L))) {
+            return "9999-12-31T23:59:59Z";
         } else {
             return time.toString();
         }
