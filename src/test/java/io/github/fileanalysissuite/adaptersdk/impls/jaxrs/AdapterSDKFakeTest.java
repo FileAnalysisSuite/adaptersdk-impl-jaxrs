@@ -72,9 +72,9 @@ final class AdapterSDKFakeTest extends JerseyTest
             .name("Fake name")
             .title("Fake title")
             .size(9L)
-            .createdTime(Instant.MIN.toString())
-            .accessedTime(Instant.MAX.toString())
-            .modifiedTime(Instant.EPOCH.toString())
+            .createdTime("0000-01-01T00:00:00Z")
+            .accessedTime("9999-12-31T23:59:59Z")
+            .modifiedTime("1970-01-01T00:00:00Z")
             .version(2)
             .additionalMetadata(Collections.singletonMap("Fake key", "Fake value"));
 

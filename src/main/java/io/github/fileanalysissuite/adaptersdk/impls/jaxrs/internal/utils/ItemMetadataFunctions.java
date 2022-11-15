@@ -44,7 +44,7 @@ public final class ItemMetadataFunctions
                 .size(itemMetadata.getSize())
                 .createdTime(Optional.ofNullable(itemMetadata.getCreatedTime()).map(t -> toRFC3339DateTimeString(t)).orElse(null))
                 .accessedTime(Optional.ofNullable(itemMetadata.getAccessedTime()).map(t -> toRFC3339DateTimeString(t)).orElse(null))
-                .modifiedTime(itemMetadata.getModifiedTime().toString())
+                .modifiedTime(toRFC3339DateTimeString(itemMetadata.getModifiedTime()))
                 .version(itemMetadata.getVersion());
 
         // TODO: What are we meant to do with these?
