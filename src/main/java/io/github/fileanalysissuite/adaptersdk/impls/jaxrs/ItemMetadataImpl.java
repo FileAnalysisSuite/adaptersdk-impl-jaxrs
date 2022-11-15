@@ -86,20 +86,6 @@ final class ItemMetadataImpl implements ItemMetadata
         return metadata.getVersion();
     }
 
-    @Override
-    public String getContentHash()
-    {
-        // TODO: This doesn't seem to be in the contract!
-        return null;
-    }
-
-    @Override
-    public String getMetadataHash()
-    {
-        // TODO: This doesn't seem to be in the contract!
-        return null;
-    }
-
     @Nonnull
     @Override
     public Map<String, Serializable> getAdditionalMetadata()

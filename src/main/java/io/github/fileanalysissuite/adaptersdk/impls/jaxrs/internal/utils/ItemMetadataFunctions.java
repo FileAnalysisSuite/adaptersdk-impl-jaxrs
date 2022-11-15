@@ -47,10 +47,6 @@ public final class ItemMetadataFunctions
                 .modifiedTime(itemMetadata.getModifiedTime().toString())
                 .version(itemMetadata.getVersion());
 
-        // TODO: What are we meant to do with these?
-        final String contentHash = itemMetadata.getContentHash();
-        final String metadataHash = itemMetadata.getMetadataHash();
-
         final Map<String, Serializable> additionalMetadata = itemMetadata.getAdditionalMetadata();
         if (additionalMetadata != null) {
             for (final Map.Entry<String, Serializable> entry : additionalMetadata.entrySet()) {
