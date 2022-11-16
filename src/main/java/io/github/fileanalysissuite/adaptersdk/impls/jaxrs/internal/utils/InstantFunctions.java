@@ -19,14 +19,18 @@ import java.time.Instant;
 
 public final class InstantFunctions
 {
-    private static final Instant minRFC3339DateTime = Instant.parse("0000-01-01T00:00:00Z");
-    private static final Instant maxRFC3339DateTime = Instant.parse("9999-12-31T23:59:59Z");
+    private static final Instant MIN_RFC3339_DATE_TIME = Instant.parse("0000-01-01T00:00:00Z");
+    private static final Instant MAX_RFC3339_DATE_TIME = Instant.parse("9999-12-31T23:59:59Z");
+
+    private InstantFunctions()
+    {
+    }
 
     public static String toRFC3339DateTimeString(final Instant time)
     {
-        if (time.isBefore(minRFC3339DateTime)) {
+        if (time.isBefore(MIN_RFC3339_DATE_TIME)) {
             return "0000-01-01T00:00:00Z";
-        } else if (time.isAfter(maxRFC3339DateTime)) {
+        } else if (time.isAfter(MAX_RFC3339_DATE_TIME)) {
             return "9999-12-31T23:59:59Z";
         } else {
             return time.toString();

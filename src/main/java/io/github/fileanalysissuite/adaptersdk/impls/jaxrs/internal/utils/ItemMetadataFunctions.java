@@ -42,9 +42,9 @@ public final class ItemMetadataFunctions
                 .title(itemMetadata.getTitle())
                 .size(itemMetadata.getSize())
                 .createdTime(Optional.ofNullable(itemMetadata.getCreatedTime())
-                    .map(t -> InstantFunctions.toRFC3339DateTimeString(t)).orElse(null))
+                    .map(InstantFunctions::toRFC3339DateTimeString).orElse(null))
                 .accessedTime(Optional.ofNullable(itemMetadata.getAccessedTime())
-                    .map(t -> InstantFunctions.toRFC3339DateTimeString(t)).orElse(null))
+                    .map(InstantFunctions::toRFC3339DateTimeString).orElse(null))
                 .modifiedTime(InstantFunctions.toRFC3339DateTimeString(itemMetadata.getModifiedTime()))
                 .version(itemMetadata.getVersion());
 
