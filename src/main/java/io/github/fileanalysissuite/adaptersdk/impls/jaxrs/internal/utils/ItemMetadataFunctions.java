@@ -17,7 +17,6 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils;
 
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.ItemMetadata;
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -42,14 +41,12 @@ public final class ItemMetadataFunctions
                 .name(itemMetadata.getName())
                 .title(itemMetadata.getTitle())
                 .size(itemMetadata.getSize())
-                .createdTime(Optional.ofNullable(itemMetadata.getCreatedTime()).map(t -> toRFC3339DateTimeString(t)).orElse(null))
-                .accessedTime(Optional.ofNullable(itemMetadata.getAccessedTime()).map(t -> toRFC3339DateTimeString(t)).orElse(null))
-                .modifiedTime(toRFC3339DateTimeString(itemMetadata.getModifiedTime()))
+                .createdTime(Optional.ofNullable(itemMetadata.getCreatedTime())
+                    .map(t -> InstantFunctions.toRFC3339DateTimeString(t)).orElse(null))
+                .accessedTime(Optional.ofNullable(itemMetadata.getAccessedTime())
+                    .map(t -> InstantFunctions.toRFC3339DateTimeString(t)).orElse(null))
+                .modifiedTime(InstantFunctions.toRFC3339DateTimeString(itemMetadata.getModifiedTime()))
                 .version(itemMetadata.getVersion());
-
-        // TODO: What are we meant to do with these?
-        final String contentHash = itemMetadata.getContentHash();
-        final String metadataHash = itemMetadata.getMetadataHash();
 
         final Map<String, Serializable> additionalMetadata = itemMetadata.getAdditionalMetadata();
         if (additionalMetadata != null) {
@@ -59,16 +56,5 @@ public final class ItemMetadataFunctions
         }
 
         return modelItemMetadata;
-    }
-
-    private static String toRFC3339DateTimeString(final Instant time)
-    {
-        if (time.isBefore(Instant.ofEpochSecond(-62167219200L))) {
-            return "0000-01-01T00:00:00Z";
-        } else if (time.isAfter(Instant.ofEpochSecond(253402300799L))) {
-            return "9999-12-31T23:59:59Z";
-        } else {
-            return time.toString();
-        }
     }
 }
