@@ -17,7 +17,6 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils;
 
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.ItemMetadata;
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -42,9 +41,11 @@ public final class ItemMetadataFunctions
                 .name(itemMetadata.getName())
                 .title(itemMetadata.getTitle())
                 .size(itemMetadata.getSize())
-                .createdTime(Optional.ofNullable(itemMetadata.getCreatedTime()).map(Instant::toString).orElse(null))
-                .accessedTime(Optional.ofNullable(itemMetadata.getAccessedTime()).map(Instant::toString).orElse(null))
-                .modifiedTime(itemMetadata.getModifiedTime().toString())
+                .createdTime(Optional.ofNullable(itemMetadata.getCreatedTime())
+                    .map(InstantFunctions::toRFC3339DateTimeString).orElse(null))
+                .accessedTime(Optional.ofNullable(itemMetadata.getAccessedTime())
+                    .map(InstantFunctions::toRFC3339DateTimeString).orElse(null))
+                .modifiedTime(InstantFunctions.toRFC3339DateTimeString(itemMetadata.getModifiedTime()))
                 .version(itemMetadata.getVersion());
 
         final Map<String, Serializable> additionalMetadata = itemMetadata.getAdditionalMetadata();
