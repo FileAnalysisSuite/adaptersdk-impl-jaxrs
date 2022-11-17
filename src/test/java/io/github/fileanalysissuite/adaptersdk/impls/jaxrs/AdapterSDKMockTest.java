@@ -16,15 +16,11 @@
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientAdapterDescriptor;
-import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientItemMetadata;
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientRepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.AdapterDescriptor;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositorySettingDefinition;
-import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.ItemMetadataFunctions;
-import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.ItemMetadata;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.TypeCode;
-import java.time.Instant;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
@@ -73,25 +69,5 @@ final class AdapterSDKMockTest extends JerseyTest
             .addPropertyDefinitionItem(expectedRepoSettingDefinition);
 
         assertThat(actualDescriptor, equalTo(expectedDescriptor));
-    }
-
-    @Test
-    void testItemMetadataDateFormat()
-    {
-        final ItemMetadata originalItemMetadata = ConvenientItemMetadata.builder()
-            .name("Fake name")
-            .size(1)
-            .itemLocation("Fake item location")
-            .createdTime(Instant.MIN)
-            .accessedTime(Instant.MAX)
-            .modifiedTime(Instant.EPOCH)
-            .build();
-
-        final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata convertedItemMetadata
-            = ItemMetadataFunctions.convertToModel(originalItemMetadata);
-
-        assertThat(convertedItemMetadata.getCreatedTime(), equalTo("0000-01-01T00:00:00Z"));
-        assertThat(convertedItemMetadata.getAccessedTime(), equalTo("9999-12-31T23:59:59Z"));
-        assertThat(convertedItemMetadata.getModifiedTime(), equalTo("1970-01-01T00:00:00Z"));
     }
 }
