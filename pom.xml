@@ -422,11 +422,11 @@
                             </properties>
                             <scripts>
                                 <script><![CDATA[
-    def itemMetadataFile = new File(
-        openapiCodegenSrcDir + '/io/github/fileanalysissuite/adaptersdk/impls/jaxrs/internal/serverstubs/model/ItemMetadata.java')
+    def fileMetadataFile = new File(
+        openapiCodegenSrcDir + '/io/github/fileanalysissuite/adaptersdk/impls/jaxrs/internal/serverstubs/model/FileMetadata.java')
 
     // Remove an unused import
-    itemMetadataFile.write(itemMetadataFile.text.replace('import org.openapitools.jackson.nullable.JsonNullable;', ''))
+    fileMetadataFile.write(fileMetadataFile.text.replace('import org.openapitools.jackson.nullable.JsonNullable;', ''))
                                 ]]>
                                 </script>
                             </scripts>
