@@ -18,8 +18,8 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileDataItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataResponse;
-import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.ItemMetadataFunctions;
-import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.ItemMetadata;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.FileMetadataFunctions;
+import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileMetadata;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.OpenStreamFunction;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.CancellationToken;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.FileDataResultsHandler;
@@ -45,32 +45,32 @@ final class FileDataResultsHandlerImpl extends FailureRegistrationImpl implement
     }
 
     @Override
-    public void queueItem(
-        final String itemId,
+    public void queueFile(
+        final String fileId,
         final OpenStreamFunction fileContents,
-        final ItemMetadata itemMetadata,
+        final FileMetadata fileMetadata,
         final CancellationToken cancellationToken
     )
     {
-        Objects.requireNonNull(itemId);
+        Objects.requireNonNull(fileId);
         Objects.requireNonNull(fileContents);
-        Objects.requireNonNull(itemMetadata);
+        Objects.requireNonNull(fileMetadata);
         Objects.requireNonNull(cancellationToken);
 
         // TODO: We're going to have to change this as we shouldn't be putting the entire contents of the file into a string
-        response.addItemsItem(new FileDataItem()
-            .itemId(itemId)
-            .fileContents(Base64.getEncoder().encodeToString(toByteArray(fileContents, itemId)))
-            .itemMetadata(ItemMetadataFunctions.convertToModel(itemMetadata)));
+        response.addFilesItem(new FileDataItem()
+            .fileId(fileId)
+            .fileContents(Base64.getEncoder().encodeToString(toByteArray(fileContents, fileId)))
+            .fileMetadata(FileMetadataFunctions.convertToModel(fileMetadata)));
     }
 
     @Nonnull
-    private static byte[] toByteArray(final OpenStreamFunction openStreamFunction, final String itemId)
+    private static byte[] toByteArray(final OpenStreamFunction openStreamFunction, final String fileId)
     {
         try (final InputStream inputStream = openStreamFunction.openInputStream()) {
             return IOUtils.toByteArray(inputStream);
         } catch (final IOException ex) {
-            LOGGER.warn("Exception reading {}", itemId, ex);
+            LOGGER.warn("Exception reading {}", fileId, ex);
 
             // TODO: What should we do here?  Add a failure to the response?
             throw new UncheckedIOException(ex);

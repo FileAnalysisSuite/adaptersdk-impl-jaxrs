@@ -17,7 +17,7 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientAdapterDescriptor;
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientFailureDetails;
-import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientItemMetadata;
+import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientFileMetadata;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.AdapterDescriptor;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.OpenStreamFunction;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
@@ -25,10 +25,10 @@ import io.github.fileanalysissuite.adaptersdk.interfaces.framework.CancellationT
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.FileDataResultsHandler;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.FileListResultsHandler;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.OptionsProvider;
-import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryItem;
+import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryFile;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RetrieveFileListRequest;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RetrieveFilesDataRequest;
-import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.ItemMetadata;
+import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileMetadata;
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientRepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.TypeCode;
@@ -59,8 +59,8 @@ final class FakeRepositoryAdapter implements RepositoryAdapter
     {
         final OptionsProvider repositoryOptions = request.getRepositoryProperties().getRepositoryOptions();
 
-        final ItemMetadata itemMetadata = ConvenientItemMetadata.builder()
-            .itemLocation(repositoryOptions.getOption("Path").get())
+        final FileMetadata fileMetadata = ConvenientFileMetadata.builder()
+            .fileLocation(repositoryOptions.getOption("Path").get())
             .name("Fake name")
             .title("Fake title")
             .size(9L)
@@ -71,8 +71,8 @@ final class FakeRepositoryAdapter implements RepositoryAdapter
             .additionalMetadata("Fake key", "Fake value")
             .build();
 
-        handler.queueItem(itemMetadata, "-", cancellationToken);
-        handler.registerFailure("Fake item location", ConvenientFailureDetails.create("Failed to read item attributes"));
+        handler.queueFile(fileMetadata, "-", cancellationToken);
+        handler.registerFailure("Fake file location", ConvenientFailureDetails.create("Failed to read file attributes"));
     }
 
     @Override
@@ -82,14 +82,14 @@ final class FakeRepositoryAdapter implements RepositoryAdapter
         final CancellationToken cancellationToken
     )
     {
-        for (final RepositoryItem item : request.getItems()) {
-            final String itemId = item.getItemId();
-            final ItemMetadata itemMetadata = item.getMetadata();
+        for (final RepositoryFile file : request.getFiles()) {
+            final String fileId = file.getFileId();
+            final FileMetadata fileMetadata = file.getMetadata();
             final OpenStreamFunction contentStream
                 = () -> new BufferedInputStream(new ByteArrayInputStream("Fake contents".getBytes(StandardCharsets.UTF_8)));
 
-            handler.queueItem(itemId, contentStream, itemMetadata, cancellationToken);
-            handler.registerFailure("Fake item location", ConvenientFailureDetails.create("Failed to read item attributes"));
+            handler.queueFile(fileId, contentStream, fileMetadata, cancellationToken);
+            handler.registerFailure("Fake file location", ConvenientFailureDetails.create("Failed to read file attributes"));
         }
     }
 }

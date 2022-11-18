@@ -15,33 +15,33 @@
  */
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
-import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.ItemMetadata;
-import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryItem;
+import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileMetadata;
+import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryFile;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 
-final class RepositoryItemImpl implements RepositoryItem
+final class RepositoryFileImpl implements RepositoryFile
 {
-    private final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryItem item;
+    private final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryFile file;
 
-    public RepositoryItemImpl(
-        final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryItem item
+    public RepositoryFileImpl(
+        final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryFile file
     )
     {
-        this.item = Objects.requireNonNull(item);
+        this.file = Objects.requireNonNull(file);
     }
 
     @Nonnull
     @Override
-    public String getItemId()
+    public String getFileId()
     {
-        return item.getItemId();
+        return file.getFileId();
     }
 
     @Nonnull
     @Override
-    public ItemMetadata getMetadata()
+    public FileMetadata getMetadata()
     {
-        return new ItemMetadataImpl(item.getMetadata());
+        return new FileMetadataImpl(file.getMetadata());
     }
 }
