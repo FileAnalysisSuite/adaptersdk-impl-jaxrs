@@ -18,8 +18,8 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileDataItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileListItem;
-import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata;
-import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryItem;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileMetadata;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryFile;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RepositoryProperties;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListRequest;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataRequest;
@@ -47,7 +47,7 @@ import org.junit.jupiter.api.Test;
 final class AdapterSDKFakeTest extends JerseyTest
 {
     private static RepositoryProperties repositoryProperties;
-    private static ItemMetadata itemMetadata;
+    private static FileMetadata fileMetadata;
     private static List<FailureDetails> failureDetails;
     private RepositoryAdapter fakeAdapter;
 
@@ -66,8 +66,8 @@ final class AdapterSDKFakeTest extends JerseyTest
     @BeforeAll
     static void setup() throws IOException
     {
-        itemMetadata = new ItemMetadata()
-            .itemLocation("Fake path")
+        fileMetadata = new FileMetadata()
+            .fileLocation("Fake path")
             .name("Fake name")
             .title("Fake title")
             .size(9L)
@@ -79,7 +79,7 @@ final class AdapterSDKFakeTest extends JerseyTest
 
         repositoryProperties = new RepositoryProperties().repositoryOptions(Collections.singletonMap("Path", "Fake path"));
 
-        failureDetails = Arrays.asList(new FailureDetails().itemLocation("Fake item location").message("Failed to read item attributes"));
+        failureDetails = Arrays.asList(new FailureDetails().fileLocation("Fake file location").message("Failed to read file attributes"));
     }
 
     @Test
@@ -95,20 +95,20 @@ final class AdapterSDKFakeTest extends JerseyTest
             = target("/retrieveFileList").request().post(retrieveFileListRequestJSON).readEntity(RetrieveFileListResponse.class);
 
         assertThat(failureDetails, equalTo(actualRetrieveFileListResponse.getFailures()));
-        final List<FileListItem> items = actualRetrieveFileListResponse.getItems();
-        final FileListItem item = items.get(0);
-        assertThat(items.size(), equalTo(1));
+        final List<FileListItem> files = actualRetrieveFileListResponse.getFiles();
+        final FileListItem item = files.get(0);
+        assertThat(files.size(), equalTo(1));
         assertThat(item.getPartitionHint(), equalTo("-"));
-        assertThat(item.getItemMetadata(), equalTo(itemMetadata));
+        assertThat(item.getFileMetadata(), equalTo(fileMetadata));
     }
 
     @Test
     void testRetrieveFilesDataPost()
     {
-        final RepositoryItem repositoryItem = new RepositoryItem().itemId("test.txt").metadata(itemMetadata);
+        final RepositoryFile repositoryFile = new RepositoryFile().fileId("test.txt").metadata(fileMetadata);
 
         final RetrieveFileDataRequest retrieveFileDataRequest
-            = new RetrieveFileDataRequest().repositoryProperties(repositoryProperties).items(Arrays.asList(repositoryItem));
+            = new RetrieveFileDataRequest().repositoryProperties(repositoryProperties).files(Arrays.asList(repositoryFile));
 
         final Entity<RetrieveFileDataRequest> retrieveFileDataRequestJSON
             = Entity.entity(retrieveFileDataRequest, MediaType.APPLICATION_JSON_TYPE);
@@ -117,12 +117,12 @@ final class AdapterSDKFakeTest extends JerseyTest
             = target("/retrieveFilesData").request().post(retrieveFileDataRequestJSON).readEntity(RetrieveFileDataResponse.class);
 
         assertThat(actualRetrieveFileDataResponse.getFailures(), equalTo(failureDetails));
-        final List<FileDataItem> items = actualRetrieveFileDataResponse.getItems();
-        final FileDataItem item = items.get(0);
-        assertThat(items.size(), equalTo(1));
-        assertThat(item.getItemId(), equalTo(repositoryItem.getItemId()));
+        final List<FileDataItem> files = actualRetrieveFileDataResponse.getFiles();
+        final FileDataItem file = files.get(0);
+        assertThat(files.size(), equalTo(1));
+        assertThat(file.getFileId(), equalTo(repositoryFile.getFileId()));
         final String expectedFileContent = Base64.getEncoder().encodeToString("Fake contents".getBytes());
-        assertThat(item.getFileContents(), equalTo(expectedFileContent));
-        assertThat(item.getItemMetadata(), equalTo(itemMetadata));
+        assertThat(file.getFileContents(), equalTo(expectedFileContent));
+        assertThat(file.getFileMetadata(), equalTo(fileMetadata));
     }
 }

@@ -15,7 +15,7 @@
  */
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
-import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.ItemMetadata;
+import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileMetadata;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Collections;
@@ -24,12 +24,12 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 
-final class ItemMetadataImpl implements ItemMetadata
+final class FileMetadataImpl implements FileMetadata
 {
-    private final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata metadata;
+    private final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileMetadata metadata;
 
-    public ItemMetadataImpl(
-        final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.ItemMetadata metadata
+    public FileMetadataImpl(
+        final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileMetadata metadata
     )
     {
         this.metadata = Objects.requireNonNull(metadata);
@@ -37,9 +37,9 @@ final class ItemMetadataImpl implements ItemMetadata
 
     @Nonnull
     @Override
-    public String getItemLocation()
+    public String getFileLocation()
     {
-        return metadata.getItemLocation();
+        return metadata.getFileLocation();
     }
 
     @Nonnull

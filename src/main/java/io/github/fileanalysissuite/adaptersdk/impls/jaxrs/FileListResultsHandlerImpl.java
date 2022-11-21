@@ -18,8 +18,8 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileListItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListResponse;
-import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.ItemMetadataFunctions;
-import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.ItemMetadata;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.FileMetadataFunctions;
+import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileMetadata;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.CancellationToken;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.FileListResultsHandler;
 import java.util.Objects;
@@ -34,18 +34,18 @@ final class FileListResultsHandlerImpl extends FailureRegistrationImpl implement
     }
 
     @Override
-    public void queueItem(
-        final ItemMetadata itemMetadata,
+    public void queueFile(
+        final FileMetadata fileMetadata,
         final String partitionHint,
         final CancellationToken cancellationToken
     )
     {
-        Objects.requireNonNull(itemMetadata);
+        Objects.requireNonNull(fileMetadata);
         Objects.requireNonNull(partitionHint);
         Objects.requireNonNull(cancellationToken);
 
-        response.addItemsItem(new FileListItem()
-            .itemMetadata(ItemMetadataFunctions.convertToModel(itemMetadata))
+        response.addFilesItem(new FileListItem()
+            .fileMetadata(FileMetadataFunctions.convertToModel(fileMetadata))
             .partitionHint(partitionHint));
     }
 

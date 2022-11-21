@@ -25,9 +25,9 @@ abstract class FailureRegistrationImpl implements FailureRegistration
     private static final Logger LOGGER = LoggerFactory.getLogger(FailureRegistrationImpl.class);
 
     @Override
-    public final void registerFailure(final String itemLocation, final FailureDetails failureDetails)
+    public final void registerFailure(final String fileLocation, final FailureDetails failureDetails)
     {
-        registerFailureImpl(itemLocation, failureDetails);
+        registerFailureImpl(fileLocation, failureDetails);
     }
 
     @Override
@@ -36,12 +36,12 @@ abstract class FailureRegistrationImpl implements FailureRegistration
         registerFailureImpl(null, failureDetails);
     }
 
-    private void registerFailureImpl(final String itemLocation, final FailureDetails failureDetails)
+    private void registerFailureImpl(final String fileLocation, final FailureDetails failureDetails)
     {
         final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails responseFailureDetails
             = new io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails();
 
-        responseFailureDetails.setItemLocation(itemLocation);
+        responseFailureDetails.setFileLocation(fileLocation);
         responseFailureDetails.setMessage(failureDetails.getMessage());
 
         final Iterable<Exception> exceptions = failureDetails.getExceptions();

@@ -15,7 +15,7 @@
  */
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
-import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryItem;
+import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryFile;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryProperties;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RetrieveFilesDataRequest;
 import java.util.Objects;
@@ -34,9 +34,9 @@ final class RetrieveFilesDataRequestImpl implements RetrieveFilesDataRequest
 
     @Nonnull
     @Override
-    public Iterable<RepositoryItem> getItems()
+    public Iterable<RepositoryFile> getFiles()
     {
-        return request.getItems().stream().<RepositoryItem>map(RepositoryItemImpl::new)::iterator;
+        return request.getFiles().stream().<RepositoryFile>map(RepositoryFileImpl::new)::iterator;
     }
 
     @Nonnull
