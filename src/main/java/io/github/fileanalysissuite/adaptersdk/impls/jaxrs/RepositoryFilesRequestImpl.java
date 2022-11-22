@@ -17,15 +17,15 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryFile;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryProperties;
-import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RetrieveFilesDataRequest;
+import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryFilesRequest;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 
-final class RetrieveFilesDataRequestImpl implements RetrieveFilesDataRequest
+final class RepositoryFilesRequestImpl implements RepositoryFilesRequest
 {
     private final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataRequest request;
 
-    public RetrieveFilesDataRequestImpl(
+    public RepositoryFilesRequestImpl(
         final io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataRequest request
     )
     {

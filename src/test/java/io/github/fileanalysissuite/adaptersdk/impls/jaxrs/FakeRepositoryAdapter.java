@@ -27,7 +27,7 @@ import io.github.fileanalysissuite.adaptersdk.interfaces.framework.FileListResul
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.OptionsProvider;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryFile;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RetrieveFileListRequest;
-import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RetrieveFilesDataRequest;
+import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryFilesRequest;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileMetadata;
 import io.github.fileanalysissuite.adaptersdk.convenience.ConvenientRepositorySettingDefinition;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositorySettingDefinition;
@@ -77,7 +77,7 @@ final class FakeRepositoryAdapter implements RepositoryAdapter
 
     @Override
     public void retrieveFilesData(
-        final RetrieveFilesDataRequest request,
+        final RepositoryFilesRequest request,
         final FileDataResultsHandler handler,
         final CancellationToken cancellationToken
     )
