@@ -56,7 +56,7 @@ final class FileMetadataImpl implements FileMetadata
     }
 
     @Override
-    public long getSize()
+    public Long getSize()
     {
         return metadata.getSize();
     }
