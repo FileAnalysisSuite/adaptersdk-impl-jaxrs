@@ -63,7 +63,7 @@ final class AdapterApiImpl implements AdapterApi
         final RetrieveFileDataResponse response = new RetrieveFileDataResponse();
 
         repositoryAdapter.retrieveFilesData(
-            new RetrieveFilesDataRequestImpl(request),
+            new RepositoryFilesRequestImpl(request),
             new FileDataResultsHandlerImpl(response),
             StandardCancellationTokens.UNCANCELABLE);
 
