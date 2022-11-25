@@ -97,7 +97,7 @@ final class AdapterSDKFakeTest extends JerseyTest
         assertThat(failureDetails, equalTo(actualRetrieveFileListResponse.getFailures()));
         final List<FileListItem> files = actualRetrieveFileListResponse.getFiles();
         final FileListItem item = files.get(0);
-        assertThat(files.size(), equalTo(1));
+        assertThat(((long) files.size()), equalTo(1L));
         assertThat(item.getPartitionHint(), equalTo("-"));
         assertThat(item.getFileMetadata(), equalTo(fileMetadata));
     }
