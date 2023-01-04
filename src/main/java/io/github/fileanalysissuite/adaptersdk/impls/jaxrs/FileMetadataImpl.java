@@ -56,12 +56,6 @@ final class FileMetadataImpl implements FileMetadata
     }
 
     @Override
-    public Long getSize()
-    {
-        return metadata.getSize();
-    }
-
-    @Override
     public Instant getCreatedTime()
     {
         return Optional.ofNullable(metadata.getCreatedTime()).map(Instant::parse).orElse(null);

@@ -63,7 +63,6 @@ final class FakeRepositoryAdapter implements RepositoryAdapter
             .fileLocation(repositoryOptions.getOption("Path").get())
             .name("Fake name")
             .title("Fake title")
-            .size(9L)
             .createdTime(Instant.MIN)
             .accessedTime(Instant.MAX)
             .modifiedTime(Instant.EPOCH)

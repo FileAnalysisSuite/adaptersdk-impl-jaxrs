@@ -40,7 +40,6 @@ public final class FileMetadataFunctions
                 .fileLocation(fileMetadata.getFileLocation())
                 .name(fileMetadata.getName())
                 .title(fileMetadata.getTitle())
-                .size(fileMetadata.getSize())
                 .createdTime(Optional.ofNullable(fileMetadata.getCreatedTime())
                     .map(InstantFunctions::toRFC3339DateTimeString).orElse(null))
                 .accessedTime(Optional.ofNullable(fileMetadata.getAccessedTime())
