@@ -17,9 +17,12 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils;
 
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileMetadata;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import javax.annotation.Nonnull;
 
 public final class FileMetadataFunctions
@@ -47,10 +50,10 @@ public final class FileMetadataFunctions
                 .modifiedTime(InstantFunctions.toRFC3339DateTimeString(fileMetadata.getModifiedTime()))
                 .version(fileMetadata.getVersion());
 
-        final Map<String, Serializable> additionalMetadata = fileMetadata.getAdditionalMetadata();
+        final Map<String, Iterable<String>> additionalMetadata = fileMetadata.getAdditionalMetadata();
         if (additionalMetadata != null) {
-            for (final Map.Entry<String, Serializable> entry : additionalMetadata.entrySet()) {
-                modelFileMetadata.putAdditionalMetadataItem(entry.getKey(), SerializableFunctions.convertToString(entry.getValue()));
+            for (final Map.Entry<String, Iterable<String>> entry : additionalMetadata.entrySet()) {
+                modelFileMetadata.putAdditionalMetadataItem(entry.getKey(), StreamSupport.stream(entry.getValue().spliterator(), false).collect(Collectors.toList()));
             }
         }
 
