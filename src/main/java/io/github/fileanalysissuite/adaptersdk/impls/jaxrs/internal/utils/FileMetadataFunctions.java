@@ -50,9 +50,9 @@ public final class FileMetadataFunctions
                 .modifiedTime(InstantFunctions.toRFC3339DateTimeString(fileMetadata.getModifiedTime()))
                 .version(fileMetadata.getVersion());
 
-        final Map<String, Iterable<String>> additionalMetadata = fileMetadata.getAdditionalMetadata();
+        final Map<String, ? extends Iterable<String>> additionalMetadata = fileMetadata.getAdditionalMetadata();
         if (additionalMetadata != null) {
-            for (final Map.Entry<String, Iterable<String>> entry : additionalMetadata.entrySet()) {
+            for (final Map.Entry<String, ? extends Iterable<String>> entry : additionalMetadata.entrySet()) {
                 modelFileMetadata.putAdditionalMetadataItem(entry.getKey(), StreamSupport.stream(entry.getValue().spliterator(), false).collect(Collectors.toList()));
             }
         }
