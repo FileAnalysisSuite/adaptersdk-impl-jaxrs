@@ -82,7 +82,7 @@ final class FileMetadataImpl implements FileMetadata
     @Override
     public Map<String, Iterable<String>> getAdditionalMetadata()
     {
-        final Map<String, Iterable<String>> additionalMetadata = metadata.getAdditionalMetadata().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        final Map<String, ? extends Iterable<String>> additionalMetadata = metadata.getAdditionalMetadata();
 
         return additionalMetadata == null
             ? Collections.emptyMap()
