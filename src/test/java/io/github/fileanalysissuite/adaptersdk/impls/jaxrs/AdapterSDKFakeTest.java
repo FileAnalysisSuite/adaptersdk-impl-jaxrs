@@ -27,7 +27,10 @@ import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.m
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListResponse;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
 import java.io.IOException;
 
 import javax.ws.rs.client.Entity;
@@ -38,7 +41,6 @@ import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -72,7 +74,7 @@ final class AdapterSDKFakeTest extends JerseyTest
             .accessedTime("9999-12-31T23:59:59Z")
             .modifiedTime("1970-01-01T00:00:00Z")
             .version(2)
-            .additionalMetadata(Collections.singletonMap("Fake key", new ArrayList<>(Collections.singleton("Fake value"))));
+            .additionalMetadata(Collections.singletonMap("Fake key", Arrays.asList("Fake value")));
 
         repositoryProperties = new RepositoryProperties().repositoryOptions(Collections.singletonMap("Path", "Fake path"));
 

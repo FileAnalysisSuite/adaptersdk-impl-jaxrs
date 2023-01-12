@@ -16,10 +16,11 @@
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileMetadata;
-import java.io.Serializable;
 import java.time.Instant;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 
 final class FileMetadataImpl implements FileMetadata

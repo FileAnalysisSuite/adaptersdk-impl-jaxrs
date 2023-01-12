@@ -37,7 +37,6 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.Collections;
 
 import javax.annotation.Nonnull;
 
@@ -68,7 +67,7 @@ final class FakeRepositoryAdapter implements RepositoryAdapter
             .accessedTime(Instant.MAX)
             .modifiedTime(Instant.EPOCH)
             .version(2)
-            .additionalMetadata("Fake key", Collections.singleton("Fake value"))
+            .additionalMetadata("Fake key", "Fake value")
             .build();
 
         handler.queueFile(fileMetadata, "-", cancellationToken);

@@ -16,7 +16,6 @@
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils;
 
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileMetadata;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
@@ -53,7 +52,9 @@ public final class FileMetadataFunctions
         final Map<String, ? extends Iterable<String>> additionalMetadata = fileMetadata.getAdditionalMetadata();
         if (additionalMetadata != null) {
             for (final Map.Entry<String, ? extends Iterable<String>> entry : additionalMetadata.entrySet()) {
-                modelFileMetadata.putAdditionalMetadataItem(entry.getKey(), StreamSupport.stream(entry.getValue().spliterator(), false).collect(Collectors.toList()));
+                modelFileMetadata.putAdditionalMetadataItem(
+                    entry.getKey(),
+                    StreamSupport.stream(entry.getValue().spliterator(), false).collect(Collectors.toList()));
             }
         }
 
