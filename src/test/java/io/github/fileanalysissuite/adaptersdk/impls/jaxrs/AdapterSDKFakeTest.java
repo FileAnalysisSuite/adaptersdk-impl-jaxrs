@@ -74,7 +74,7 @@ final class AdapterSDKFakeTest extends JerseyTest
             .accessedTime("9999-12-31T23:59:59Z")
             .modifiedTime("1970-01-01T00:00:00Z")
             .version(2)
-            .additionalMetadata(Collections.singletonMap("Fake key", "Fake value"));
+            .additionalMetadata(Collections.singletonMap("Fake key", Arrays.asList("Fake value")));
 
         repositoryProperties = new RepositoryProperties().repositoryOptions(Collections.singletonMap("Path", "Fake path"));
 

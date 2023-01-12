@@ -16,7 +16,6 @@
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileMetadata;
-import java.io.Serializable;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.Map;
@@ -82,9 +81,9 @@ final class FileMetadataImpl implements FileMetadata
 
     @Nonnull
     @Override
-    public Map<String, Serializable> getAdditionalMetadata()
+    public Map<String, Iterable<String>> getAdditionalMetadata()
     {
-        final Map<String, String> additionalMetadata = metadata.getAdditionalMetadata();
+        final Map<String, ? extends Iterable<String>> additionalMetadata = metadata.getAdditionalMetadata();
 
         return additionalMetadata == null
             ? Collections.emptyMap()
