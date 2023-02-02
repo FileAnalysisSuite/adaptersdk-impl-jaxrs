@@ -374,6 +374,7 @@
                                 <useTags>true</useTags>
                                 <interfaceOnly>true</interfaceOnly>
                                 <useSwaggerAnnotations>false</useSwaggerAnnotations>
+                                <returnResponse>true</returnResponse>
                             </configOptions>
                             <typeMappings>string+date-time=String</typeMappings>
                             <addCompileSourceRoot>false</addCompileSourceRoot>

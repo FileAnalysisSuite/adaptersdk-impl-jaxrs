@@ -25,6 +25,7 @@ import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.Adapter
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
 import java.util.Objects;
 import javax.annotation.Nonnull;
+import javax.ws.rs.core.Response;
 
 final class AdapterApiImpl implements AdapterApi
 {
@@ -37,36 +38,51 @@ final class AdapterApiImpl implements AdapterApi
 
     @Nonnull
     @Override
-    public AdapterDescriptor adapterDescriptorGet()
+    public Response adapterDescriptorGet()
     {
-        return AdapterDescriptorFunctions.convertToModel(repositoryAdapter.createDescriptor());
+        try {
+            AdapterDescriptor descriptor = AdapterDescriptorFunctions.convertToModel(repositoryAdapter.createDescriptor());
+            return Response.ok(descriptor).build();
+        } catch (InterruptedException ex) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+        }
     }
 
     @Nonnull
     @Override
-    public RetrieveFileListResponse retrieveFileListPost(final RetrieveFileListRequest request)
+    public Response retrieveFileListPost(final RetrieveFileListRequest request)
     {
-        final RetrieveFileListResponse response = new RetrieveFileListResponse();
+        try {
+            final RetrieveFileListResponse response = new RetrieveFileListResponse();
 
-        repositoryAdapter.retrieveFileList(
-            new RetrieveFileListRequestImpl(request),
-            new FileListResultsHandlerImpl(response),
-            StandardCancellationTokens.UNCANCELABLE);
+            repositoryAdapter.retrieveFileList(
+                    new RetrieveFileListRequestImpl(request),
+                    new FileListResultsHandlerImpl(response),
+                    StandardCancellationTokens.UNCANCELABLE);
 
-        return response;
+            return Response.ok(response).build();
+        } catch (InterruptedException ex) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+        }
+
     }
 
     @Nonnull
     @Override
-    public RetrieveFileDataResponse retrieveFilesDataPost(final RetrieveFileDataRequest request)
+    public Response retrieveFilesDataPost(final RetrieveFileDataRequest request)
     {
-        final RetrieveFileDataResponse response = new RetrieveFileDataResponse();
+        try {
+            final RetrieveFileDataResponse response = new RetrieveFileDataResponse();
 
-        repositoryAdapter.retrieveFilesData(
-            new RepositoryFilesRequestImpl(request),
-            new FileDataResultsHandlerImpl(response),
-            StandardCancellationTokens.UNCANCELABLE);
+            repositoryAdapter.retrieveFilesData(
+                    new RepositoryFilesRequestImpl(request),
+                    new FileDataResultsHandlerImpl(response),
+                    StandardCancellationTokens.UNCANCELABLE);
 
-        return response;
+            return Response.ok(response).build();
+        } catch (InterruptedException ex) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
+        }
+
     }
 }
