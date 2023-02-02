@@ -41,9 +41,9 @@ final class AdapterApiImpl implements AdapterApi
     public Response adapterDescriptorGet()
     {
         try {
-            AdapterDescriptor descriptor = AdapterDescriptorFunctions.convertToModel(repositoryAdapter.createDescriptor());
+            final AdapterDescriptor descriptor = AdapterDescriptorFunctions.convertToModel(repositoryAdapter.createDescriptor());
             return Response.ok(descriptor).build();
-        } catch (InterruptedException ex) {
+        } catch (final InterruptedException ex) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
     }
@@ -61,7 +61,7 @@ final class AdapterApiImpl implements AdapterApi
                     StandardCancellationTokens.UNCANCELABLE);
 
             return Response.ok(response).build();
-        } catch (InterruptedException ex) {
+        } catch (final InterruptedException ex) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
 
@@ -80,7 +80,7 @@ final class AdapterApiImpl implements AdapterApi
                     StandardCancellationTokens.UNCANCELABLE);
 
             return Response.ok(response).build();
-        } catch (InterruptedException ex) {
+        } catch (final InterruptedException ex) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
 
