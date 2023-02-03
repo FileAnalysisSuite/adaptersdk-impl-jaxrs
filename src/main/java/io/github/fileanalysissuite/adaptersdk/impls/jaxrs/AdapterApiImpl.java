@@ -56,15 +56,14 @@ final class AdapterApiImpl implements AdapterApi
             final RetrieveFileListResponse response = new RetrieveFileListResponse();
 
             repositoryAdapter.retrieveFileList(
-                    new RetrieveFileListRequestImpl(request),
-                    new FileListResultsHandlerImpl(response),
-                    StandardCancellationTokens.UNCANCELABLE);
+                new RetrieveFileListRequestImpl(request),
+                new FileListResultsHandlerImpl(response),
+                StandardCancellationTokens.UNCANCELABLE);
 
             return Response.ok(response).build();
         } catch (final InterruptedException ex) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
-
     }
 
     @Nonnull
@@ -75,14 +74,13 @@ final class AdapterApiImpl implements AdapterApi
             final RetrieveFileDataResponse response = new RetrieveFileDataResponse();
 
             repositoryAdapter.retrieveFilesData(
-                    new RepositoryFilesRequestImpl(request),
-                    new FileDataResultsHandlerImpl(response),
-                    StandardCancellationTokens.UNCANCELABLE);
+                new RepositoryFilesRequestImpl(request),
+                new FileDataResultsHandlerImpl(response),
+                StandardCancellationTokens.UNCANCELABLE);
 
             return Response.ok(response).build();
         } catch (final InterruptedException ex) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
-
     }
 }
