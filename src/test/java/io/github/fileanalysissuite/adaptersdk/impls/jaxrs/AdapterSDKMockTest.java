@@ -48,7 +48,7 @@ final class AdapterSDKMockTest extends JerseyTest
     }
 
     @Test
-    void testAdapterDescriptorGet()
+    void testAdapterDescriptorGet() throws InterruptedException
     {
         final io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositorySettingDefinition repoSettingDefinition
             = ConvenientRepositorySettingDefinition.create("Fake name", TypeCode.TEXT, true, true);
@@ -73,7 +73,7 @@ final class AdapterSDKMockTest extends JerseyTest
     }
 
     @Test
-    void testEmptySettingsDefinitions()
+    void testEmptySettingsDefinitions() throws InterruptedException
     {
         final io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.AdapterDescriptor descriptor
             = ConvenientAdapterDescriptor.create("Fake adapter type");
