@@ -23,17 +23,17 @@ import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.m
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListResponse;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.AdapterDescriptorFunctions;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.ws.rs.core.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class AdapterApiImpl implements AdapterApi
 {
-    private final RepositoryAdapter repositoryAdapter;
     private static final Logger LOGGER = LoggerFactory.getLogger(AdapterApiImpl.class);
+
+    private final RepositoryAdapter repositoryAdapter;
 
     public AdapterApiImpl(final RepositoryAdapter repositoryAdapter)
     {
@@ -48,7 +48,7 @@ final class AdapterApiImpl implements AdapterApi
             final AdapterDescriptor descriptor = AdapterDescriptorFunctions.convertToModel(repositoryAdapter.createDescriptor());
             return Response.ok(descriptor).build();
         } catch (final InterruptedException ex) {
-            LOGGER.error("InterruptedException whilst creating Descriptor: " + ex);
+            LOGGER.info("InterruptedException whilst creating descriptor", ex);
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
     }
@@ -67,7 +67,7 @@ final class AdapterApiImpl implements AdapterApi
 
             return Response.ok(response).build();
         } catch (final InterruptedException ex) {
-            LOGGER.error("InterruptedException when retrieving FileList: " + ex);
+            LOGGER.info("InterruptedException when retrieving file list", ex);
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
     }
@@ -86,7 +86,7 @@ final class AdapterApiImpl implements AdapterApi
 
             return Response.ok(response).build();
         } catch (final InterruptedException ex) {
-            LOGGER.error("InterruptedException when retrieving FilesData: " + ex);
+            LOGGER.info("InterruptedException when retrieving files data", ex);
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         }
     }
