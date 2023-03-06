@@ -18,6 +18,7 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FailureDetails;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.FileDataItem;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataResponse;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetryFileInfo;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils.FileMetadataFunctions;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileMetadata;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.OpenStreamFunction;
@@ -26,6 +27,7 @@ import io.github.fileanalysissuite.adaptersdk.interfaces.framework.FileDataResul
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.time.Duration;
 import java.util.Base64;
 import java.util.Objects;
 import javax.annotation.Nonnull;
@@ -62,6 +64,18 @@ final class FileDataResultsHandlerImpl extends FailureRegistrationImpl implement
             .fileId(fileId)
             .fileContents(Base64.getEncoder().encodeToString(toByteArray(fileContents, fileId)))
             .fileMetadata(FileMetadataFunctions.convertToModel(fileMetadata)));
+    }
+
+    @Override
+    public void retryAfter(final String fileId, final Duration delay, final CancellationToken cancellationToken)
+    {
+        Objects.requireNonNull(fileId);
+        Objects.requireNonNull(delay);
+        Objects.requireNonNull(cancellationToken);
+
+        response.addRetriesItem(new RetryFileInfo()
+            .fileId(fileId)
+            .retryAfter(delay.toString()));
     }
 
     @Nonnull

@@ -25,8 +25,10 @@ import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.m
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataRequest;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileDataResponse;
 import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetrieveFileListResponse;
+import io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.serverstubs.model.RetryFileInfo;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
@@ -123,5 +125,11 @@ final class AdapterSDKFakeTest extends JerseyTest
         final String expectedFileContent = Base64.getEncoder().encodeToString("Fake contents".getBytes());
         assertThat(file.getFileContents(), equalTo(expectedFileContent));
         assertThat(file.getFileMetadata(), equalTo(fileMetadata));
+
+        final List<RetryFileInfo> retries = actualRetrieveFileDataResponse.getRetries();
+        final RetryFileInfo retry = retries.get(0);
+
+        assertThat(retry.getFileId(), equalTo("Fake file id"));
+        assertThat(retry.getRetryAfter(), equalTo(Duration.ofHours(1).toString()));
     }
 }
