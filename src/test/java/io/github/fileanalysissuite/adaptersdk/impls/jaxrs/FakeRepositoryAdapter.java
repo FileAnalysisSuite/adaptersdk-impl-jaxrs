@@ -36,6 +36,7 @@ import io.github.fileanalysissuite.adaptersdk.interfaces.framework.TypeCode;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.Instant;
 
 import javax.annotation.Nonnull;
@@ -89,6 +90,7 @@ final class FakeRepositoryAdapter implements RepositoryAdapter
 
             handler.queueFile(fileId, contentStream, fileMetadata, cancellationToken);
             handler.registerFailure("Fake file location", ConvenientFailureDetails.create("Failed to read file attributes"));
+            handler.retryAfter("Fake file location", Duration.ofHours(1), cancellationToken);
         }
     }
 }
