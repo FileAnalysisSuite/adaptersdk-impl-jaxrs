@@ -90,7 +90,7 @@ final class FakeRepositoryAdapter implements RepositoryAdapter
 
             handler.queueFile(fileId, contentStream, fileMetadata, cancellationToken);
             handler.registerFailure("Fake file location", ConvenientFailureDetails.create("Failed to read file attributes"));
-            handler.retryAfter("Fake file location", Duration.ofHours(1), cancellationToken);
+            handler.retryAfter("Fake file id", Duration.ofHours(1), cancellationToken);
         }
     }
 }

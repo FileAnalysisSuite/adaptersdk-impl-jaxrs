@@ -67,13 +67,15 @@ final class FileDataResultsHandlerImpl extends FailureRegistrationImpl implement
     }
 
     @Override
-    public void retryAfter(String fileId, Duration retryAfter, CancellationToken cancellationToken)
+    public void retryAfter(final String fileId, final Duration delay, final CancellationToken cancellationToken)
     {
         Objects.requireNonNull(fileId);
-        Objects.requireNonNull(retryAfter);
+        Objects.requireNonNull(delay);
         Objects.requireNonNull(cancellationToken);
 
-        response.addRetriesItem(new RetryFileInfo().fileId(fileId).retryAfter(retryAfter.toString()));
+        response.addRetriesItem(new RetryFileInfo()
+            .fileId(fileId)
+            .retryAfter(delay.toString()));
     }
 
     @Nonnull

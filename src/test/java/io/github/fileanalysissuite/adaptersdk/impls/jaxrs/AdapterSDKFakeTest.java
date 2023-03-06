@@ -126,11 +126,10 @@ final class AdapterSDKFakeTest extends JerseyTest
         assertThat(file.getFileContents(), equalTo(expectedFileContent));
         assertThat(file.getFileMetadata(), equalTo(fileMetadata));
 
-        List<RetryFileInfo> retries = actualRetrieveFileDataResponse.getRetries();
-        RetryFileInfo retry = retries.get(0);
+        final List<RetryFileInfo> retries = actualRetrieveFileDataResponse.getRetries();
+        final RetryFileInfo retry = retries.get(0);
 
-        assertThat(retry.getFileId(), equalTo("Fake file location"));
+        assertThat(retry.getFileId(), equalTo("Fake file id"));
         assertThat(retry.getRetryAfter(), equalTo(Duration.ofHours(1).toString()));
-
     }
 }
