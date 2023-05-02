@@ -354,7 +354,7 @@
                     <dependency>
                         <groupId>io.github.fileanalysissuite.adapters.rest.contract</groupId>
                         <artifactId>adapter-rest-contract</artifactId>
-                        <version>1.0.0-SNAPSHOT</version>
+                        <version>1.0.0-77</version>
                     </dependency>
                 </dependencies>
                 <executions>
