@@ -19,7 +19,7 @@ import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryFil
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryProperties;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryFilesRequest;
 import java.util.Objects;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 final class RepositoryFilesRequestImpl implements RepositoryFilesRequest
 {

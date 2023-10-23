@@ -16,13 +16,13 @@
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils;
 
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.FileMetadata;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import javax.annotation.Nonnull;
 
 public final class FileMetadataFunctions
 {

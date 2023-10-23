@@ -17,8 +17,8 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.OptionsProvider;
 import io.github.fileanalysissuite.adaptersdk.interfaces.framework.RepositoryProperties;
+import jakarta.annotation.Nonnull;
 import java.util.Optional;
-import javax.annotation.Nonnull;
 
 final class RepositoryPropertiesImpl implements RepositoryProperties
 {

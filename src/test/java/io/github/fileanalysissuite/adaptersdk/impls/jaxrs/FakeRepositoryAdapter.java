@@ -39,7 +39,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 final class FakeRepositoryAdapter implements RepositoryAdapter
 {

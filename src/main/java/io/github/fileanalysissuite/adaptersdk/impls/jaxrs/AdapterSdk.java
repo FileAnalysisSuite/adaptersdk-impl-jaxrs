@@ -16,9 +16,9 @@
 package io.github.fileanalysissuite.adaptersdk.impls.jaxrs;
 
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositoryAdapter;
+import jakarta.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Set;
-import javax.annotation.Nonnull;
 
 public final class AdapterSdk
 {

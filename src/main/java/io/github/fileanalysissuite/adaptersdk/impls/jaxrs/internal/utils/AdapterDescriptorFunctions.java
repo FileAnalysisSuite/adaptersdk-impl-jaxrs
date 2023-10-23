@@ -17,8 +17,8 @@ package io.github.fileanalysissuite.adaptersdk.impls.jaxrs.internal.utils;
 
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.AdapterDescriptor;
 import io.github.fileanalysissuite.adaptersdk.interfaces.extensibility.RepositorySettingDefinition;
+import jakarta.annotation.Nonnull;
 import java.util.Objects;
-import javax.annotation.Nonnull;
 
 public final class AdapterDescriptorFunctions
 {
